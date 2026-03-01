@@ -222,9 +222,10 @@ En `data.json`, agrega un objeto al array `workpieceMaterials` siguiendo esta es
 Desarrollado para la **asignatura** de Procesos de Manufactura Moderna de la  **Pontificia Universidad Javeriana · Bogotá** 
 
 ```
-Nombre Estudiante: _________________________________
-Nombre Estudiante: _________________________________
-Nombre Estudiante: _________________________________
+Nombre Estudiante: Santiago Castro Zuluaga
+Nombre Estudiante: Carolhina Real Vega
+Nombre Estudiante: Jacobo Parra
+Nombre Estudiante: Miguel 
 ---
 
 ## 📄 Licencia
