@@ -26,11 +26,7 @@ Procesos de Manufactura Moderna · Primer Semestre 2026
 - [Operaciones Soportadas](#-operaciones-soportadas)
 - [Fórmulas Implementadas](#-fórmulas-implementadas)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Instalación y Uso](#-instalación-y-uso)
 - [Base de Datos (data.json)](#-base-de-datos-datajson)
-- [Interfaz de Usuario](#-interfaz-de-usuario)
-- [Tecnologías Utilizadas](#-tecnologías-utilizadas)
-- [Compatibilidad](#-compatibilidad)
 - [Autores](#-autores)
 
 ---
