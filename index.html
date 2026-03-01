@@ -1,1369 +1,198 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Calculadora de Mecanizado | PUJ</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
-<style>
-/* ═══════════════════════════════════════════════
-   VARIABLES & RESET
-═══════════════════════════════════════════════ */
-:root {
-  --bg:         #0d0f12;
-  --bg2:        #131619;
-  --bg3:        #1a1e23;
-  --panel:      #1e2228;
-  --border:     #2a3040;
-  --border2:    #3a4558;
-  --accent:     #f5a623;
-  --accent2:    #ff6b35;
-  --green:      #3ddc84;
-  --blue:       #4fc3f7;
-  --red:        #ff5252;
-  --text:       #e8eaed;
-  --text2:      #9aa5b4;
-  --text3:      #5c6a7a;
-  --mono:       'Share Tech Mono', monospace;
-  --display:    'Barlow Condensed', sans-serif;
-  --body:       'Barlow', sans-serif;
-  --radius:     6px;
-  --radius-lg:  12px;
-  --shadow:     0 4px 24px rgba(0,0,0,.45);
-  --glow:       0 0 20px rgba(245,166,35,.18);
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Mecanizado | PUJ</title>
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--body);
-  font-size: 15px;
-  line-height: 1.6;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap"
+    rel="stylesheet"
+  />
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg2); }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-
-/* ═══════════════════════════════════════════════
-   BACKGROUND GRID
-═══════════════════════════════════════════════ */
-body::before {
-  content:'';
-  position: fixed; inset: 0;
-  background-image:
-    linear-gradient(rgba(245,166,35,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245,166,35,.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ═══════════════════════════════════════════════
-   HEADER
-═══════════════════════════════════════════════ */
-header {
-  position: relative;
-  z-index: 10;
-  background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  min-height: 72px;
-  flex-wrap: wrap;
-}
-.header-brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.brand-icon {
-  width: 44px; height: 44px;
-  border: 2px solid var(--accent);
-  border-radius: var(--radius);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
-  background: rgba(245,166,35,.08);
-  flex-shrink: 0;
-  animation: iconPulse 3s ease-in-out infinite;
-}
-@keyframes iconPulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(245,166,35,.3); }
-  50%      { box-shadow: 0 0 0 6px rgba(245,166,35,.0); }
-}
-.brand-text h1 {
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: clamp(16px,3vw,22px);
-  letter-spacing: .5px;
-  color: var(--text);
-  line-height: 1.1;
-}
-.brand-text p {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--accent);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-top: 2px;
-}
-.header-meta {
-  text-align: right;
-}
-.header-meta span {
-  display: block;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text3);
-  letter-spacing: 1px;
-}
-.status-dot {
-  display: inline-block;
-  width: 7px; height: 7px;
-  background: var(--green);
-  border-radius: 50%;
-  margin-right: 5px;
-  animation: blink 2s ease-in-out infinite;
-}
-@keyframes blink {
-  0%,100% { opacity: 1; } 50% { opacity: .3; }
-}
-
-/* ═══════════════════════════════════════════════
-   MAIN LAYOUT
-═══════════════════════════════════════════════ */
-main {
-  position: relative;
-  z-index: 1;
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 28px 20px 60px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-}
-
-/* ═══════════════════════════════════════════════
-   SECTION TITLES
-═══════════════════════════════════════════════ */
-.section-title {
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-.section-title::before {
-  content: '';
-  display: block;
-  width: 3px; height: 14px;
-  background: var(--accent);
-  border-radius: 2px;
-}
-
-/* ═══════════════════════════════════════════════
-   OPERATION SELECTOR
-═══════════════════════════════════════════════ */
-.op-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-.op-card {
-  background: var(--panel);
-  border: 2px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px 14px;
-  cursor: pointer;
-  text-align: center;
-  transition: all .25s cubic-bezier(.4,0,.2,1);
-  user-select: none;
-  position: relative;
-  overflow: hidden;
-}
-.op-card::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(245,166,35,.06), transparent);
-  opacity: 0;
-  transition: opacity .25s;
-}
-.op-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-.op-card:hover::after { opacity: 1; }
-.op-card.active {
-  border-color: var(--accent);
-  background: rgba(245,166,35,.07);
-  box-shadow: var(--glow);
-}
-.op-card.active::after { opacity: 1; }
-.op-icon {
-  font-size: 32px;
-  display: block;
-  margin-bottom: 8px;
-  transition: transform .3s;
-}
-.op-card:hover .op-icon { transform: scale(1.12); }
-.op-card.active .op-icon { animation: spin360 .5s ease; }
-@keyframes spin360 { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-.op-label {
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 17px;
-  letter-spacing: .5px;
-  color: var(--text);
-  display: block;
-}
-.op-desc {
-  font-size: 11px;
-  color: var(--text3);
-  margin-top: 4px;
-  line-height: 1.4;
-}
-.op-badge {
-  display: inline-block;
-  margin-top: 8px;
-  background: rgba(245,166,35,.12);
-  border: 1px solid rgba(245,166,35,.25);
-  border-radius: 20px;
-  padding: 2px 10px;
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--accent);
-  letter-spacing: 1px;
-}
-.op-card.active .op-badge {
-  background: rgba(245,166,35,.25);
-  border-color: var(--accent);
-}
-
-/* ═══════════════════════════════════════════════
-   TWO-COLUMN CONFIG AREA
-═══════════════════════════════════════════════ */
-.config-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-/* ═══════════════════════════════════════════════
-   PANEL / CARD
-═══════════════════════════════════════════════ */
-.panel {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-}
-.panel-full { grid-column: 1/-1; }
-
-/* ═══════════════════════════════════════════════
-   SELECTS & INPUTS
-═══════════════════════════════════════════════ */
-.form-group { margin-bottom: 14px; }
-.form-group:last-child { margin-bottom: 0; }
-label {
-  display: block;
-  font-size: 11px;
-  font-family: var(--mono);
-  color: var(--text2);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-select, input[type="number"] {
-  width: 100%;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-family: var(--body);
-  font-size: 14px;
-  padding: 10px 12px;
-  border-radius: var(--radius);
-  outline: none;
-  transition: border-color .2s, box-shadow .2s;
-  appearance: none;
-  -webkit-appearance: none;
-}
-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa5b4' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 34px;
-  cursor: pointer;
-}
-select:focus, input[type="number"]:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(245,166,35,.12);
-}
-select option { background: var(--bg3); }
-optgroup { font-family: var(--mono); font-size: 11px; color: var(--text3); }
-
-/* Input group with unit */
-.input-with-unit {
-  display: flex;
-  gap: 0;
-}
-.input-with-unit input {
-  flex: 1;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-right: none;
-}
-.unit-badge {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-left: none;
-  color: var(--accent);
-  font-family: var(--mono);
-  font-size: 11px;
-  padding: 0 12px;
-  display: flex; align-items: center;
-  border-top-right-radius: var(--radius);
-  border-bottom-right-radius: var(--radius);
-  white-space: nowrap;
-  letter-spacing: .5px;
-}
-
-/* Range slider */
-.range-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 6px;
-}
-input[type="range"] {
-  flex: 1;
-  -webkit-appearance: none;
-  height: 4px;
-  background: var(--border);
-  border-radius: 2px;
-  outline: none;
-  cursor: pointer;
-}
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 16px; height: 16px;
-  background: var(--accent);
-  border-radius: 50%;
-  border: 2px solid var(--bg);
-  box-shadow: 0 0 6px rgba(245,166,35,.5);
-  transition: transform .15s;
-}
-input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-.range-val {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--accent);
-  min-width: 58px;
-  text-align: right;
-}
-
-/* ═══════════════════════════════════════════════
-   PASS TYPE BUTTONS
-═══════════════════════════════════════════════ */
-.pass-buttons {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.pass-btn {
-  flex: 1;
-  min-width: 90px;
-  padding: 9px 12px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--text2);
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all .2s;
-  text-align: center;
-}
-.pass-btn:hover { border-color: var(--border2); color: var(--text); }
-.pass-btn.active-desbaste    { background: rgba(255,82,82,.12);   border-color: var(--red);   color: var(--red);   }
-.pass-btn.active-semiacabado { background: rgba(243,156,18,.12);  border-color: #f39c12;       color: #f39c12;      }
-.pass-btn.active-acabado     { background: rgba(61,220,132,.12);  border-color: var(--green); color: var(--green); }
-
-/* Feed hint */
-.feed-hint {
-  margin-top: 8px;
-  background: var(--bg2);
-  border: 1px dashed var(--border);
-  border-radius: var(--radius);
-  padding: 10px 14px;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text3);
-  transition: all .3s;
-  min-height: 42px;
-}
-.feed-hint strong { color: var(--accent); }
-.feed-hint.visible { border-color: var(--accent); color: var(--text2); }
-
-/* ═══════════════════════════════════════════════
-   FORMULA DISPLAY
-═══════════════════════════════════════════════ */
-.formula-box {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px 16px;
-  margin-bottom: 12px;
-}
-.formula-item {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 6px;
-}
-.formula-item:last-child { margin-bottom: 0; }
-.formula-var {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--accent);
-  min-width: 24px;
-  font-weight: bold;
-}
-.formula-eq {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text3);
-  flex: 1;
-}
-
-/* ═══════════════════════════════════════════════
-   CALCULATE BUTTON
-═══════════════════════════════════════════════ */
-.calc-btn {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border: none;
-  border-radius: var(--radius-lg);
-  color: #0d0f12;
-  font-family: var(--display);
-  font-weight: 900;
-  font-size: 17px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all .25s;
-  position: relative;
-  overflow: hidden;
-}
-.calc-btn::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,.2), transparent);
-  opacity: 0;
-  transition: opacity .25s;
-}
-.calc-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,166,35,.35); }
-.calc-btn:hover::before { opacity: 1; }
-.calc-btn:active { transform: translateY(0); }
-.calc-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-.calc-btn .btn-icon { margin-right: 8px; font-size: 18px; }
-
-/* ═══════════════════════════════════════════════
-   RESULTS PANEL
-═══════════════════════════════════════════════ */
-.results-wrapper {
-  opacity: 0;
-  transform: translateY(20px);
-  pointer-events: none;
-  transition: opacity .4s ease, transform .4s ease;
-}
-.results-wrapper.visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.results-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
-}
-.result-op-label {
-  font-family: var(--display);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.result-op-label .badge {
-  font-size: 11px;
-  font-weight: 600;
-  background: rgba(245,166,35,.15);
-  border: 1px solid rgba(245,166,35,.4);
-  color: var(--accent);
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-family: var(--mono);
-  letter-spacing: 1px;
-}
-.result-timestamp {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text3);
-  letter-spacing: 1px;
-}
-
-.results-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.result-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px 16px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  transition: transform .25s, border-color .25s;
-}
-.result-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--card-color, var(--accent));
-}
-.result-card:hover { transform: translateY(-3px); border-color: var(--border2); }
-.result-card.card-S { --card-color: #4fc3f7; }
-.result-card.card-F { --card-color: #f5a623; }
-.result-card.card-t { --card-color: #3ddc84; }
-.result-label {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text3);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.result-value {
-  font-family: var(--mono);
-  font-size: clamp(22px, 4vw, 36px);
-  font-weight: bold;
-  line-height: 1;
-  margin-bottom: 4px;
-  transition: all .4s;
-}
-.result-card.card-S .result-value { color: #4fc3f7; }
-.result-card.card-F .result-value { color: #f5a623; }
-.result-card.card-t .result-value { color: #3ddc84; }
-.result-unit {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text3);
-  letter-spacing: 1px;
-}
-.result-name {
-  font-size: 11px;
-  color: var(--text2);
-  margin-top: 8px;
-  font-family: var(--display);
-  font-weight: 500;
-}
-
-/* Calculation steps */
-.calc-steps {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 16px;
-}
-.calc-step {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-}
-.calc-step:last-child { border-bottom: none; }
-.step-num {
-  width: 22px; height: 22px;
-  background: rgba(245,166,35,.1);
-  border: 1px solid rgba(245,166,35,.3);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--accent);
-  flex-shrink: 0;
-}
-.step-formula {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text2);
-}
-.step-formula em {
-  font-style: normal;
-  color: var(--text3);
-}
-.step-result {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--accent);
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-/* Warning */
-.warning-box {
-  background: rgba(255,82,82,.08);
-  border: 1px solid rgba(255,82,82,.3);
-  border-radius: var(--radius);
-  padding: 12px 14px;
-  font-size: 12px;
-  color: #ff8080;
-  font-family: var(--mono);
-  margin-bottom: 14px;
-  display: none;
-}
-.warning-box.show { display: block; }
-.warning-box::before { content: '⚠ '; }
-
-/* Input summary */
-.input-summary {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 12px 16px;
-}
-.input-summary-title {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text3);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 0;
-  border-bottom: 1px solid rgba(42,48,64,.6);
-  font-size: 12px;
-}
-.summary-row:last-child { border-bottom: none; }
-.summary-key { color: var(--text3); font-family: var(--mono); font-size: 11px; }
-.summary-val { color: var(--text); font-family: var(--mono); font-size: 12px; }
-
-/* ═══════════════════════════════════════════════
-   COUNTER ANIMATION
-═══════════════════════════════════════════════ */
-@keyframes countUp {
-  from { opacity: 0; transform: scale(.7); }
-  to   { opacity: 1; transform: scale(1); }
-}
-.animated { animation: countUp .5s cubic-bezier(.34,1.56,.64,1) forwards; }
-
-/* ═══════════════════════════════════════════════
-   LOADING SPINNER
-═══════════════════════════════════════════════ */
-#loadingScreen {
-  position: fixed; inset: 0;
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  gap: 20px;
-  transition: opacity .5s;
-}
-#loadingScreen.hidden { opacity: 0; pointer-events: none; }
-.loader-ring {
-  width: 60px; height: 60px;
-  border: 3px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loader-text {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text3);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-}
-
-/* ═══════════════════════════════════════════════
-   NOTIFICATION TOAST
-═══════════════════════════════════════════════ */
-.toast {
-  position: fixed;
-  bottom: 24px; right: 24px;
-  background: var(--panel);
-  border: 1px solid var(--border2);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius);
-  padding: 14px 18px;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text);
-  box-shadow: var(--shadow);
-  z-index: 999;
-  max-width: 280px;
-  opacity: 0;
-  transform: translateX(20px);
-  transition: all .3s;
-}
-.toast.show { opacity: 1; transform: translateX(0); }
-.toast.error { border-left-color: var(--red); }
-.toast.success { border-left-color: var(--green); }
-
-/* ═══════════════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════════════ */
-.page-footer {
-  position: relative; z-index: 1;
-  border-top: 1px solid var(--border);
-  padding: 16px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.footer-left {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text3);
-  letter-spacing: 1px;
-}
-.footer-right {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text3);
-}
-.footer-right span { color: var(--accent); }
-
-/* ═══════════════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  header { padding: 12px 16px; min-height: unset; }
-  main { padding: 16px 14px 50px; gap: 16px; }
-  .config-grid { grid-template-columns: 1fr; }
-  .op-grid { grid-template-columns: 1fr; gap: 8px; }
-  .op-card { padding: 14px 12px; display: flex; align-items: center; gap: 14px; text-align: left; }
-  .op-icon { font-size: 26px; margin-bottom: 0; flex-shrink: 0; }
-  .results-grid { grid-template-columns: 1fr; }
-  .pass-buttons { gap: 6px; }
-  .calc-step { grid-template-columns: auto 1fr; }
-  .step-result { grid-column: 2; font-size: 12px; }
-  .page-footer { justify-content: center; text-align: center; }
-}
-@media (max-width: 480px) {
-  .brand-text h1 { font-size: 14px; }
-  .op-label { font-size: 15px; }
-  .result-value { font-size: 26px; }
-}
-</style>
+  <!-- Estilos externos -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<!-- Loading Screen -->
-<div id="loadingScreen">
-  <div class="loader-ring"></div>
-  <div class="loader-text">Cargando datos de mecanizado...</div>
-</div>
-
-<!-- Toast Notification -->
-<div class="toast" id="toast"></div>
-
-<!-- Header -->
-<header>
-  <div class="header-brand">
-    <div class="brand-icon">⚙</div>
-    <div class="brand-text">
-      <h1>Calculadora de Mecanizado</h1>
-      <p>Desp. de Material · PUJ · Ing. Industrial</p>
-    </div>
+  <!-- ══════════════════════════════════════
+       PANTALLA DE CARGA
+  ══════════════════════════════════════ -->
+  <div id="loadingScreen">
+    <div class="loader-ring"></div>
+    <div class="loader-text">Cargando datos de mecanizado...</div>
   </div>
-  <div class="header-meta">
-    <span><span class="status-dot"></span>SISTEMA ACTIVO</span>
-    <span id="currentTime">--:--:--</span>
-    <span>PRIMER PARCIAL 2026</span>
-  </div>
-</header>
 
-<!-- Main -->
-<main>
+  <!-- ══════════════════════════════════════
+       NOTIFICACIÓN TOAST
+  ══════════════════════════════════════ -->
+  <div class="toast" id="toast"></div>
 
-  <!-- PASO 1: Selección de operación -->
-  <section>
-    <div class="section-title">01 — Seleccionar Operación</div>
-    <div class="op-grid" id="opGrid">
-      <!-- Rendered by JS -->
+  <!-- ══════════════════════════════════════
+       ENCABEZADO
+  ══════════════════════════════════════ -->
+  <header>
+    <div class="header-brand">
+      <div class="brand-icon">⚙</div>
+      <div class="brand-text">
+        <h1>Calculadora de Mecanizado</h1>
+        <p>Desp. de Material · PUJ · Ing. Industrial</p>
+      </div>
     </div>
-  </section>
+    <div class="header-meta">
+      <span><span class="status-dot"></span>SISTEMA ACTIVO</span>
+      <span id="currentTime">--:--:--</span>
+      <span>PRIMER PARCIAL 2026</span>
+    </div>
+  </header>
 
-  <!-- PASO 2: Configuración -->
-  <section>
-    <div class="section-title">02 — Configurar Parámetros</div>
-    <div class="config-grid">
+  <!-- ══════════════════════════════════════
+       CONTENIDO PRINCIPAL
+  ══════════════════════════════════════ -->
+  <main>
 
-      <!-- Col A: Material y Herramienta -->
-      <div class="panel">
+    <!-- ─── PASO 1: Selección de operación ─── -->
+    <section>
+      <div class="section-title">01 — Seleccionar Operación</div>
+      <div class="op-grid" id="opGrid">
+        <!-- Renderizado por script.js -->
+      </div>
+    </section>
+
+    <!-- ─── PASO 2: Parámetros ─── -->
+    <section>
+      <div class="section-title">02 — Configurar Parámetros</div>
+      <div class="config-grid">
+
+        <!-- Columna A: Material y herramienta -->
+        <div class="panel">
+          <div class="form-group">
+            <label for="selMaterial">Material de la Pieza</label>
+            <select id="selMaterial">
+              <option value="">— Seleccionar material —</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="selTool">Material de la Herramienta</label>
+            <select id="selTool">
+              <option value="">— Seleccionar herramienta —</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="infoVc" style="display:none">
+            <label>Velocidad de Corte (Vc)</label>
+            <div class="input-with-unit">
+              <input type="number" id="vcDisplay" readonly />
+              <span class="unit-badge">m/min</span>
+            </div>
+          </div>
+
+          <!-- Bloque de fórmulas activas -->
+          <div class="formula-box" id="formulaBox" style="display:none">
+            <div id="formulaContent"></div>
+          </div>
+        </div>
+
+        <!-- Columna B: Variables de proceso -->
+        <div class="panel">
+          <div id="varsContainer">
+            <div class="vars-placeholder">
+              ← Selecciona una operación para ver las variables
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.config-grid -->
+
+      <!-- Tipo de pasada + sugerencia de avance -->
+      <div class="panel panel-full" id="passPanel" style="display:none">
         <div class="form-group">
-          <label>Material de la Pieza</label>
-          <select id="selMaterial">
-            <option value="">— Seleccionar material —</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Material de la Herramienta</label>
-          <select id="selTool">
-            <option value="">— Seleccionar herramienta —</option>
-          </select>
-        </div>
-        <div class="form-group" id="infoVc" style="display:none">
-          <label>Velocidad de corte (Vc)</label>
-          <div class="input-with-unit">
-            <input type="number" id="vcDisplay" readonly style="background:var(--bg3);cursor:default"/>
-            <span class="unit-badge">m/min</span>
-          </div>
-        </div>
-
-        <!-- Fórmulas activas -->
-        <div class="formula-box" id="formulaBox" style="display:none">
-          <div id="formulaContent"></div>
-        </div>
-      </div>
-
-      <!-- Col B: Variables de proceso -->
-      <div class="panel">
-        <div id="varsContainer">
-          <div style="color:var(--text3);font-family:var(--mono);font-size:12px;text-align:center;padding:20px 0;">
-            ← Selecciona una operación para ver las variables
+          <label>Tipo de Pasada</label>
+          <div class="pass-buttons" id="passButtons"></div>
+          <div class="feed-hint" id="feedHint">
+            Selecciona un tipo de pasada para ver el avance recomendado.
           </div>
         </div>
       </div>
 
-    </div>
-
-    <!-- Tipo de pasada + feed hint -->
-    <div class="panel panel-full" id="passPanel" style="display:none">
-      <div class="form-group">
-        <label>Tipo de Pasada</label>
-        <div class="pass-buttons" id="passButtons"></div>
-        <div class="feed-hint" id="feedHint">Selecciona un tipo de pasada para ver el avance recomendado.</div>
+      <!-- Botón calcular -->
+      <div class="panel panel-full btn-panel">
+        <button class="calc-btn" id="calcBtn" onclick="calculateResults()">
+          <span class="btn-icon">▶</span> Calcular Parámetros de Corte
+        </button>
       </div>
-    </div>
+    </section>
 
-    <!-- Botón calcular -->
-    <div class="panel panel-full" style="padding: 16px;">
-      <button class="calc-btn" id="calcBtn" onclick="calculateResults()">
-        <span class="btn-icon">▶</span> Calcular Parámetros de Corte
-      </button>
-    </div>
-  </section>
+    <!-- ─── PASO 3: Resultados ─── -->
+    <section>
+      <div class="section-title">03 — Resultados</div>
+      <div class="results-wrapper" id="resultsWrapper">
 
-  <!-- PASO 3: Resultados -->
-  <section>
-    <div class="section-title">03 — Resultados</div>
-    <div class="results-wrapper" id="resultsWrapper">
+        <!-- Advertencia de combinación inválida -->
+        <div class="warning-box" id="warningBox"></div>
 
-      <!-- Warning -->
-      <div class="warning-box" id="warningBox"></div>
+        <div class="panel panel-full">
 
-      <!-- Header resultado -->
-      <div class="panel panel-full" style="padding: 18px 20px;">
-        <div class="results-header">
-          <div class="result-op-label" id="resOpLabel">—</div>
-          <div class="result-timestamp" id="resTimestamp">—</div>
-        </div>
-
-        <!-- Cards S, F, t -->
-        <div class="results-grid">
-          <div class="result-card card-S" id="cardS">
-            <div class="result-label">Velocidad de Husillo</div>
-            <div class="result-value" id="valS">—</div>
-            <div class="result-unit">rev/min (rpm)</div>
-            <div class="result-name">S — Spindle Speed</div>
+          <!-- Encabezado del resultado -->
+          <div class="results-header">
+            <div class="result-op-label" id="resOpLabel">—</div>
+            <div class="result-timestamp" id="resTimestamp">—</div>
           </div>
-          <div class="result-card card-F" id="cardF">
-            <div class="result-label">Velocidad de Avance</div>
-            <div class="result-value" id="valF">—</div>
-            <div class="result-unit">mm/min</div>
-            <div class="result-name">F — Feed Rate</div>
+
+          <!-- Tarjetas de resultados: S, F, t -->
+          <div class="results-grid">
+            <div class="result-card card-S">
+              <div class="result-label">Velocidad de Husillo</div>
+              <div class="result-value" id="valS">—</div>
+              <div class="result-unit">rev/min (rpm)</div>
+              <div class="result-name">S — Spindle Speed</div>
+            </div>
+            <div class="result-card card-F">
+              <div class="result-label">Velocidad de Avance</div>
+              <div class="result-value" id="valF">—</div>
+              <div class="result-unit">mm/min</div>
+              <div class="result-name">F — Feed Rate</div>
+            </div>
+            <div class="result-card card-t">
+              <div class="result-label">Tiempo de Mecanizado</div>
+              <div class="result-value" id="valT">—</div>
+              <div class="result-unit">min</div>
+              <div class="result-name">t — Machining Time</div>
+            </div>
           </div>
-          <div class="result-card card-t" id="cardT">
-            <div class="result-label">Tiempo de Mecanizado</div>
-            <div class="result-value" id="valT">—</div>
-            <div class="result-unit">min</div>
-            <div class="result-name">t — Machining Time</div>
+
+          <!-- Desglose de pasos del cálculo -->
+          <div class="calc-steps" id="calcSteps"></div>
+
+          <!-- Tabla de resumen de entradas -->
+          <div class="input-summary">
+            <div class="input-summary-title">Parámetros de Entrada</div>
+            <div id="inputSummary"></div>
           </div>
+
         </div>
+      </div><!-- /.results-wrapper -->
+    </section>
 
-        <!-- Steps -->
-        <div class="calc-steps" id="calcSteps"></div>
+  </main>
 
-        <!-- Input summary -->
-        <div class="input-summary">
-          <div class="input-summary-title">Parámetros de Entrada</div>
-          <div id="inputSummary"></div>
-        </div>
-      </div>
-
+  <!-- ══════════════════════════════════════
+       PIE DE PÁGINA
+  ══════════════════════════════════════ -->
+  <footer class="page-footer">
+    <div class="footer-left">
+      PONTIFICIA UNIVERSIDAD JAVERIANA · DEPARTAMENTO DE INGENIERÍA INDUSTRIAL
     </div>
-  </section>
-
-</main>
-
-<!-- Footer -->
-<footer class="page-footer">
-  <div class="footer-left">
-    PONTIFICIA UNIVERSIDAD JAVERIANA · DEPARTAMENTO DE INGENIERÍA INDUSTRIAL
-  </div>
-  <div class="footer-right">
-    S <span>[rev/min]</span> · F <span>[mm/min]</span> · t <span>[min]</span>
-  </div>
-</footer>
-
-<script>
-/* ═══════════════════════════════════════════════════════════
-   ESTADO GLOBAL
-═══════════════════════════════════════════════════════════ */
-let DB = null;           // datos del JSON
-let state = {
-  operation: null,       // 'torneado' | 'fresado' | 'taladrado'
-  material:  null,
-  tool:      null,
-  passType:  null,
-};
-
-/* ═══════════════════════════════════════════════════════════
-   CARGA DEL JSON
-═══════════════════════════════════════════════════════════ */
-async function loadData() {
-  try {
-    const res = await fetch('data.json');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    DB = await res.json();
-    init();
-  } catch(e) {
-    // Fallback: load from embedded data (same file usage in direct open)
-    showToast('Cargando datos integrados...', 'error');
-    DB = getEmbeddedData();
-    init();
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   INIT
-═══════════════════════════════════════════════════════════ */
-function init() {
-  renderOperations();
-  renderMaterials();
-  renderToolMaterials();
-  startClock();
-
-  document.getElementById('loadingScreen').classList.add('hidden');
-}
-
-/* ═══════════════════════════════════════════════════════════
-   OPERACIONES
-═══════════════════════════════════════════════════════════ */
-function renderOperations() {
-  const grid = document.getElementById('opGrid');
-  const ops = DB.operations;
-  grid.innerHTML = Object.values(ops).map(op => `
-    <div class="op-card" id="opCard_${op.id}" onclick="selectOperation('${op.id}')">
-      <span class="op-icon">${getOpEmoji(op.id)}</span>
-      <div>
-        <span class="op-label">${op.label}</span>
-        <p class="op-desc">${op.description}</p>
-        <span class="op-badge">${Object.keys(op.formula).map(k => k.toUpperCase()).join(' · ')}</span>
-      </div>
+    <div class="footer-right">
+      S <span>[rev/min]</span> · F <span>[mm/min]</span> · t <span>[min]</span>
     </div>
-  `).join('');
-}
+  </footer>
 
-function getOpEmoji(id) {
-  return { torneado:'◎', fresado:'✦', taladrado:'▼' }[id] || '⚙';
-}
+  <!-- Script principal -->
+  <script src="script.js"></script>
 
-function selectOperation(opId) {
-  state.operation = opId;
-  state.passType = null;
-
-  document.querySelectorAll('.op-card').forEach(c => c.classList.remove('active'));
-  document.getElementById('opCard_' + opId).classList.add('active');
-
-  renderVars();
-  renderFormulas();
-  renderPassButtons();
-  updateVcDisplay();
-
-  document.getElementById('passPanel').style.display = '';
-  document.getElementById('formulaBox').style.display = '';
-}
-
-/* ═══════════════════════════════════════════════════════════
-   MATERIALES
-═══════════════════════════════════════════════════════════ */
-function renderMaterials() {
-  const sel = document.getElementById('selMaterial');
-  const groups = {};
-  DB.workpieceMaterials.forEach(m => {
-    if (!groups[m.group]) groups[m.group] = [];
-    groups[m.group].push(m);
-  });
-  let html = '<option value="">— Seleccionar material —</option>';
-  Object.entries(groups).forEach(([g, mats]) => {
-    html += `<optgroup label="${g}">`;
-    mats.forEach(m => {
-      html += `<option value="${m.id}">${m.label} — ${m.hardness}</option>`;
-    });
-    html += '</optgroup>';
-  });
-  sel.innerHTML = html;
-  sel.addEventListener('change', () => { state.material = sel.value; updateVcDisplay(); });
-}
-
-function renderToolMaterials() {
-  const sel = document.getElementById('selTool');
-  let html = '<option value="">— Seleccionar herramienta —</option>';
-  DB.toolMaterials.forEach(t => {
-    html += `<option value="${t.id}">${t.icon} ${t.label}</option>`;
-  });
-  sel.innerHTML = html;
-  sel.addEventListener('change', () => { state.tool = sel.value; updateVcDisplay(); });
-}
-
-function getVc() {
-  if (!state.material || !state.tool || !state.operation) return null;
-  const mat = DB.workpieceMaterials.find(m => m.id === state.material);
-  if (!mat) return null;
-  const vc = mat.cuttingSpeeds[state.tool]?.[state.operation];
-  return (vc && vc > 0) ? vc : null;
-}
-
-function updateVcDisplay() {
-  const vc = getVc();
-  const infoVc = document.getElementById('infoVc');
-  const vcDisplay = document.getElementById('vcDisplay');
-  if (vc !== null) {
-    infoVc.style.display = '';
-    vcDisplay.value = vc;
-  } else {
-    infoVc.style.display = 'none';
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   VARIABLES (inputs dinámicos)
-═══════════════════════════════════════════════════════════ */
-function renderVars() {
-  if (!state.operation) return;
-  const op = DB.operations[state.operation];
-  const container = document.getElementById('varsContainer');
-  container.innerHTML = op.variables.map(v => `
-    <div class="form-group">
-      <label>${v.label}</label>
-      <div class="range-row">
-        <input type="range" id="range_${v.id}"
-          min="${v.min}" max="${v.max}" step="${v.step}" value="${v.default}"
-          oninput="syncInput('${v.id}', this.value)"/>
-        <span class="range-val" id="rv_${v.id}">${v.default}</span>
-      </div>
-      <div class="input-with-unit" style="margin-top:6px">
-        <input type="number" id="num_${v.id}"
-          min="${v.min}" max="${v.max}" step="${v.step}" value="${v.default}"
-          oninput="syncRange('${v.id}', this.value)"/>
-        <span class="unit-badge">${v.unit}</span>
-      </div>
-    </div>
-  `).join('');
-}
-
-function syncInput(id, val) {
-  const num = parseFloat(val);
-  document.getElementById('num_' + id).value = num;
-  document.getElementById('rv_' + id).textContent = num;
-}
-function syncRange(id, val) {
-  const num = parseFloat(val);
-  const range = document.getElementById('range_' + id);
-  if (!isNaN(num)) {
-    range.value = num;
-    document.getElementById('rv_' + id).textContent = num;
-  }
-}
-
-function getVarValue(id) {
-  const el = document.getElementById('num_' + id);
-  return el ? parseFloat(el.value) : NaN;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   FÓRMULAS
-═══════════════════════════════════════════════════════════ */
-function renderFormulas() {
-  if (!state.operation) return;
-  const op = DB.operations[state.operation];
-  const box = document.getElementById('formulaContent');
-  box.innerHTML = Object.entries(op.formula).map(([v, eq]) => `
-    <div class="formula-item">
-      <span class="formula-var">${v.toUpperCase()}</span>
-      <span class="formula-eq">${eq}</span>
-    </div>
-  `).join('');
-}
-
-/* ═══════════════════════════════════════════════════════════
-   TIPOS DE PASADA
-═══════════════════════════════════════════════════════════ */
-function renderPassButtons() {
-  if (!state.operation) return;
-  const op = DB.operations[state.operation];
-  const container = document.getElementById('passButtons');
-  container.innerHTML = Object.entries(DB.passTypes).map(([id, p]) => `
-    <button class="pass-btn" id="passBtn_${id}" onclick="selectPass('${id}')">${p.label}</button>
-  `).join('');
-}
-
-function selectPass(passId) {
-  state.passType = passId;
-  Object.keys(DB.passTypes).forEach(id => {
-    const btn = document.getElementById('passBtn_' + id);
-    btn.className = 'pass-btn';
-  });
-  document.getElementById('passBtn_' + passId).className = `pass-btn active-${passId}`;
-
-  const op = DB.operations[state.operation];
-  const sug = op.feedSuggestions;
-  const hint = document.getElementById('feedHint');
-
-  // Find a hint entry matching passId or containing passId in key
-  const match = Object.entries(sug).find(([k]) => k === passId || k.includes(passId));
-  if (match) {
-    const [, s] = match;
-    hint.innerHTML = `<strong>${s.label}:</strong> Rango recomendado <strong>${s.range}</strong> mm — Valor típico: <strong>${s.typical}</strong>`;
-    hint.classList.add('visible');
-
-    // Auto-set the feed input
-    const op = DB.operations[state.operation];
-    const feedVar = state.operation === 'fresado' ? 'fz' : 'f';
-    const numEl = document.getElementById('num_' + feedVar);
-    if (numEl) {
-      numEl.value = s.typical;
-      syncRange(feedVar, s.typical);
-    }
-  } else {
-    hint.classList.remove('visible');
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   CALCULAR
-═══════════════════════════════════════════════════════════ */
-function calculateResults() {
-  // Validations
-  if (!state.operation) { showToast('Selecciona una operación.', 'error'); return; }
-  if (!state.material)  { showToast('Selecciona el material de la pieza.', 'error'); return; }
-  if (!state.tool)      { showToast('Selecciona el material de la herramienta.', 'error'); return; }
-
-  const vc = getVc();
-  if (!vc) {
-    showWarning(`La combinación seleccionada (${state.tool.toUpperCase()} + ${state.operation}) no está recomendada o no tiene datos. Verifica los parámetros.`);
-    return;
-  }
-  hideWarning();
-
-  const PI = DB.unitConversions.Pi;
-  const op = DB.operations[state.operation];
-
-  // Collect vars
-  const vars = {};
-  op.variables.forEach(v => { vars[v.id] = getVarValue(v.id); });
-
-  const D  = vars.D;
-  const L  = vars.L;
-  const f  = vars.f;
-  const fz = vars.fz;
-  const Z  = vars.Z;
-
-  // Validate numbers
-  for (const [k, v] of Object.entries(vars)) {
-    if (isNaN(v) || v <= 0) { showToast(`El valor de ${k.toUpperCase()} es inválido.`, 'error'); return; }
-  }
-
-  // Calculations
-  const S = (1000 * vc) / (PI * D);
-
-  let F, t, steps;
-
-  if (state.operation === 'torneado') {
-    F = f * S;
-    t = L / F;
-    steps = [
-      { n:1, formula:`S = (1000 × ${vc}) / (π × ${D})`, result: fmt(S) + ' rpm' },
-      { n:2, formula:`F = f × S = ${f} × ${fmt(S)}`, result: fmt(F) + ' mm/min' },
-      { n:3, formula:`t = L / F = ${L} / ${fmt(F)}`, result: fmtT(t) + ' min' },
-    ];
-  } else if (state.operation === 'fresado') {
-    F = fz * Z * S;
-    t = L / F;
-    steps = [
-      { n:1, formula:`S = (1000 × ${vc}) / (π × ${D})`, result: fmt(S) + ' rpm' },
-      { n:2, formula:`F = fz × Z × S = ${fz} × ${Z} × ${fmt(S)}`, result: fmt(F) + ' mm/min' },
-      { n:3, formula:`t = L / F = ${L} / ${fmt(F)}`, result: fmtT(t) + ' min' },
-    ];
-  } else if (state.operation === 'taladrado') {
-    F = f * S;
-    const approach = 0.3 * D;
-    t = (L + approach) / F;
-    steps = [
-      { n:1, formula:`S = (1000 × ${vc}) / (π × ${D})`, result: fmt(S) + ' rpm' },
-      { n:2, formula:`F = f × S = ${f} × ${fmt(S)}`, result: fmt(F) + ' mm/min' },
-      { n:3, formula:`t = (L + 0.3D) / F = (${L} + ${fmtD(approach)}) / ${fmt(F)}`, result: fmtT(t) + ' min' },
-    ];
-  }
-
-  displayResults({ S, F, t, steps, vars, vc });
-  showToast('Cálculo completado ✓', 'success');
-}
-
-/* ═══════════════════════════════════════════════════════════
-   DISPLAY RESULTS
-═══════════════════════════════════════════════════════════ */
-function displayResults({ S, F, t, steps, vars, vc }) {
-  const op = DB.operations[state.operation];
-  const mat = DB.workpieceMaterials.find(m => m.id === state.material);
-  const tool = DB.toolMaterials.find(t => t.id === state.tool);
-  const pass = state.passType ? DB.passTypes[state.passType] : null;
-
-  // Label
-  document.getElementById('resOpLabel').innerHTML = `
-    ${getOpEmoji(state.operation)} ${op.label}
-    <span class="badge">${pass ? pass.label.toUpperCase() : 'CALCULADO'}</span>
-  `;
-  document.getElementById('resTimestamp').textContent = new Date().toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-
-  // Animate values
-  setAnimatedValue('valS', fmt(S));
-  setAnimatedValue('valF', fmt(F));
-  setAnimatedValue('valT', fmtT(t));
-
-  // Steps
-  const stepsEl = document.getElementById('calcSteps');
-  stepsEl.innerHTML = steps.map(s => `
-    <div class="calc-step">
-      <div class="step-num">${s.n}</div>
-      <div class="step-formula"><em>Paso ${s.n}:</em> ${escHtml(s.formula)}</div>
-      <div class="step-result">${s.result}</div>
-    </div>
-  `).join('');
-
-  // Input summary
-  const summaryRows = [
-    { k: 'Operación',        v: op.label },
-    { k: 'Material pieza',   v: mat ? mat.label : '—' },
-    { k: 'Herramienta',      v: tool ? tool.label : '—' },
-    { k: 'Vc (tabla)',       v: vc + ' m/min' },
-    ...op.variables.map(vr => ({
-      k: vr.label.split(' (')[0],
-      v: vars[vr.id] + ' ' + vr.unit
-    })),
-  ];
-  document.getElementById('inputSummary').innerHTML = summaryRows.map(r => `
-    <div class="summary-row">
-      <span class="summary-key">${r.k}</span>
-      <span class="summary-val">${r.v}</span>
-    </div>
-  `).join('');
-
-  // Show results
-  document.getElementById('resultsWrapper').classList.add('visible');
-  setTimeout(() => {
-    document.getElementById('resultsWrapper').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 200);
-}
-
-function setAnimatedValue(id, val) {
-  const el = document.getElementById(id);
-  el.classList.remove('animated');
-  void el.offsetWidth; // reflow
-  el.textContent = val;
-  el.classList.add('animated');
-}
-
-/* ═══════════════════════════════════════════════════════════
-   HELPERS
-═══════════════════════════════════════════════════════════ */
-function fmt(n)  { return parseFloat(n.toFixed(2)).toLocaleString('es-CO', {minimumFractionDigits:2, maximumFractionDigits:2}); }
-function fmtT(n) { return parseFloat(n.toFixed(4)).toLocaleString('es-CO', {minimumFractionDigits:4, maximumFractionDigits:4}); }
-function fmtD(n) { return parseFloat(n.toFixed(3)).toString(); }
-function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function showToast(msg, type='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show ' + type;
-  setTimeout(() => t.classList.remove('show'), 3200);
-}
-
-function showWarning(msg) {
-  const w = document.getElementById('warningBox');
-  w.textContent = msg;
-  w.classList.add('show');
-  document.getElementById('resultsWrapper').classList.add('visible');
-}
-function hideWarning() {
-  document.getElementById('warningBox').classList.remove('show');
-}
-
-function startClock() {
-  const el = document.getElementById('currentTime');
-  setInterval(() => {
-    el.textContent = new Date().toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  }, 1000);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   DATOS EMBEBIDOS (fallback si no se puede cargar el .json)
-═══════════════════════════════════════════════════════════ */
-function getEmbeddedData() {
-  return {"appInfo":{"title":"Calculadora de Mecanizado","subtitle":"Procesos de Manufactura Moderna","institution":"Pontificia Universidad Javeriana","department":"Ingeniería Industrial","version":"1.0.0"},"toolMaterials":[{"id":"hss","label":"Acero Rápido (HSS)","icon":"⚙️"},{"id":"carburo","label":"Carburo Cementado","icon":"💎"},{"id":"ceramica","label":"Cerámica","icon":"🔬"},{"id":"cbn","label":"CBN / Diamante","icon":"✦"}],"workpieceMaterials":[{"id":"acero_suave","label":"Acero Suave (Bajo Carbono)","group":"Aceros","hardness":"HB 120-180","cuttingSpeeds":{"hss":{"torneado":30,"fresado":25,"taladrado":28},"carburo":{"torneado":120,"fresado":100,"taladrado":90},"ceramica":{"torneado":280,"fresado":0,"taladrado":0},"cbn":{"torneado":400,"fresado":0,"taladrado":0}}},{"id":"acero_medio","label":"Acero Medio Carbono","group":"Aceros","hardness":"HB 180-250","cuttingSpeeds":{"hss":{"torneado":25,"fresado":20,"taladrado":22},"carburo":{"torneado":100,"fresado":80,"taladrado":75},"ceramica":{"torneado":240,"fresado":0,"taladrado":0},"cbn":{"torneado":350,"fresado":0,"taladrado":0}}},{"id":"acero_alto","label":"Acero Alto Carbono","group":"Aceros","hardness":"HB 250-320","cuttingSpeeds":{"hss":{"torneado":18,"fresado":15,"taladrado":16},"carburo":{"torneado":80,"fresado":65,"taladrado":60},"ceramica":{"torneado":200,"fresado":0,"taladrado":0},"cbn":{"torneado":300,"fresado":0,"taladrado":0}}},{"id":"acero_inox","label":"Acero Inoxidable 304","group":"Aceros","hardness":"HB 150-200","cuttingSpeeds":{"hss":{"torneado":15,"fresado":12,"taladrado":10},"carburo":{"torneado":60,"fresado":50,"taladrado":45},"ceramica":{"torneado":150,"fresado":0,"taladrado":0},"cbn":{"torneado":200,"fresado":0,"taladrado":0}}},{"id":"acero_inox_316","label":"Acero Inoxidable 316","group":"Aceros","hardness":"HB 160-210","cuttingSpeeds":{"hss":{"torneado":12,"fresado":10,"taladrado":8},"carburo":{"torneado":50,"fresado":40,"taladrado":38},"ceramica":{"torneado":130,"fresado":0,"taladrado":0},"cbn":{"torneado":180,"fresado":0,"taladrado":0}}},{"id":"hierro_gris","label":"Hierro Fundido Gris","group":"Hierros","hardness":"HB 180-260","cuttingSpeeds":{"hss":{"torneado":25,"fresado":20,"taladrado":22},"carburo":{"torneado":100,"fresado":80,"taladrado":75},"ceramica":{"torneado":300,"fresado":180,"taladrado":0},"cbn":{"torneado":450,"fresado":0,"taladrado":0}}},{"id":"hierro_nodular","label":"Hierro Fundido Nodular","group":"Hierros","hardness":"HB 200-280","cuttingSpeeds":{"hss":{"torneado":20,"fresado":18,"taladrado":18},"carburo":{"torneado":85,"fresado":70,"taladrado":65},"ceramica":{"torneado":250,"fresado":150,"taladrado":0},"cbn":{"torneado":380,"fresado":0,"taladrado":0}}},{"id":"aluminio","label":"Aluminio (Aleaciones)","group":"No Ferrosos","hardness":"HB 30-80","cuttingSpeeds":{"hss":{"torneado":100,"fresado":80,"taladrado":90},"carburo":{"torneado":300,"fresado":250,"taladrado":220},"ceramica":{"torneado":600,"fresado":400,"taladrado":0},"cbn":{"torneado":800,"fresado":600,"taladrado":0}}},{"id":"bronce","label":"Bronce / Latón","group":"No Ferrosos","hardness":"HB 80-150","cuttingSpeeds":{"hss":{"torneado":50,"fresado":40,"taladrado":45},"carburo":{"torneado":150,"fresado":120,"taladrado":110},"ceramica":{"torneado":0,"fresado":0,"taladrado":0},"cbn":{"torneado":0,"fresado":0,"taladrado":0}}},{"id":"cobre","label":"Cobre","group":"No Ferrosos","hardness":"HB 40-90","cuttingSpeeds":{"hss":{"torneado":60,"fresado":50,"taladrado":55},"carburo":{"torneado":180,"fresado":150,"taladrado":140},"ceramica":{"torneado":0,"fresado":0,"taladrado":0},"cbn":{"torneado":0,"fresado":0,"taladrado":0}}},{"id":"titanio","label":"Titanio Ti-6Al-4V","group":"Especiales","hardness":"HB 300-370","cuttingSpeeds":{"hss":{"torneado":8,"fresado":6,"taladrado":5},"carburo":{"torneado":40,"fresado":30,"taladrado":25},"ceramica":{"torneado":0,"fresado":0,"taladrado":0},"cbn":{"torneado":100,"fresado":0,"taladrado":0}}},{"id":"plastico","label":"Plástico (Nylon / PVC)","group":"No Metálicos","hardness":"Shore 60-85","cuttingSpeeds":{"hss":{"torneado":80,"fresado":60,"taladrado":70},"carburo":{"torneado":200,"fresado":160,"taladrado":150},"ceramica":{"torneado":0,"fresado":0,"taladrado":0},"cbn":{"torneado":0,"fresado":0,"taladrado":0}}}],"operations":{"torneado":{"id":"torneado","label":"Torneado","icon":"◎","description":"Mecanizado en torno por rotación de la pieza","formula":{"S":"S = (1000 × Vc) / (π × D)","F":"F = f × S","t":"t = L / F"},"variables":[{"id":"D","label":"Diámetro de la pieza (D)","unit":"mm","min":1,"max":2000,"step":0.1,"default":50},{"id":"L","label":"Longitud de corte (L)","unit":"mm","min":1,"max":5000,"step":0.1,"default":100},{"id":"f","label":"Avance por revolución (f)","unit":"mm/rev","min":0.01,"max":2,"step":0.01,"default":0.2}],"feedSuggestions":{"desbaste":{"label":"Desbaste","range":"0.25 – 0.50","typical":0.35},"semiacabado":{"label":"Semiacabado","range":"0.10 – 0.25","typical":0.15},"acabado":{"label":"Acabado","range":"0.05 – 0.10","typical":0.07}}},"fresado":{"id":"fresado","label":"Fresado","icon":"✦","description":"Mecanizado por rotación de la herramienta (fresa)","formula":{"S":"S = (1000 × Vc) / (π × D)","F":"F = fz × Z × S","t":"t = L / F"},"variables":[{"id":"D","label":"Diámetro de la fresa (D)","unit":"mm","min":1,"max":500,"step":0.1,"default":20},{"id":"L","label":"Longitud de corte (L)","unit":"mm","min":1,"max":5000,"step":0.1,"default":100},{"id":"Z","label":"Número de dientes (Z)","unit":"dientes","min":1,"max":20,"step":1,"default":4},{"id":"fz","label":"Avance por diente (fz)","unit":"mm/diente","min":0.001,"max":1,"step":0.001,"default":0.05}],"feedSuggestions":{"desbaste":{"label":"Desbaste","range":"0.05 – 0.20","typical":0.12},"semiacabado":{"label":"Semiacabado","range":"0.02 – 0.05","typical":0.03},"acabado":{"label":"Acabado","range":"0.01 – 0.02","typical":0.015}}},"taladrado":{"id":"taladrado","label":"Taladrado","icon":"▼","description":"Mecanizado de agujeros por rotación de la broca","formula":{"S":"S = (1000 × Vc) / (π × D)","F":"F = f × S","t":"t = (L + 0.3 × D) / F"},"variables":[{"id":"D","label":"Diámetro de la broca (D)","unit":"mm","min":0.5,"max":100,"step":0.1,"default":10},{"id":"L","label":"Profundidad del agujero (L)","unit":"mm","min":1,"max":1000,"step":0.1,"default":30},{"id":"f","label":"Avance por revolución (f)","unit":"mm/rev","min":0.01,"max":1,"step":0.01,"default":0.1}],"feedSuggestions":{"D_menor_5":{"label":"D < 5 mm","range":"0.05 – 0.10","typical":0.07},"D_5_15":{"label":"5 ≤ D < 15 mm","range":"0.10 – 0.20","typical":0.15},"D_15_30":{"label":"15 ≤ D < 30 mm","range":"0.20 – 0.35","typical":0.25},"D_mayor_30":{"label":"D ≥ 30 mm","range":"0.30 – 0.50","typical":0.40}}}},"passTypes":{"desbaste":{"id":"desbaste","label":"Desbaste","color":"#e74c3c"},"semiacabado":{"id":"semiacabado","label":"Semiacabado","color":"#f39c12"},"acabado":{"id":"acabado","label":"Acabado","color":"#2ecc71"}},"unitConversions":{"note":"S en rev/min (rpm), F en mm/min, t en min","Pi":3.141592653589793}};
-}
-
-/* ═══════════════════════════════════════════════════════════
-   BOOT
-═══════════════════════════════════════════════════════════ */
-loadData();
-</script>
 </body>
 </html>

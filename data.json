@@ -1,0 +1,242 @@
+{
+  "appInfo": {
+    "title": "Calculadora de Mecanizado",
+    "subtitle": "Procesos de Manufactura Moderna",
+    "institution": "Pontificia Universidad Javeriana",
+    "department": "Ingeniería Industrial",
+    "version": "1.0.0"
+  },
+
+  "toolMaterials": [
+    { "id": "hss",       "label": "Acero Rápido (HSS)",    "icon": "⚙️" },
+    { "id": "carburo",   "label": "Carburo Cementado",     "icon": "💎" },
+    { "id": "ceramica",  "label": "Cerámica",              "icon": "🔬" },
+    { "id": "cbn",       "label": "CBN / Diamante",        "icon": "✦"  }
+  ],
+
+  "workpieceMaterials": [
+    {
+      "id": "acero_suave",
+      "label": "Acero Suave (Bajo Carbono)",
+      "group": "Aceros",
+      "hardness": "HB 120-180",
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 30,  "fresado": 25,  "taladrado": 28  },
+        "carburo":  { "torneado": 120, "fresado": 100, "taladrado": 90  },
+        "ceramica": { "torneado": 280, "fresado": 0,   "taladrado": 0   },
+        "cbn":      { "torneado": 400, "fresado": 0,   "taladrado": 0   }
+      }
+    },
+    {
+      "id": "acero_medio",
+      "label": "Acero Medio Carbono",
+      "group": "Aceros",
+      "hardness": "HB 180-250",
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 25,  "fresado": 20,  "taladrado": 22  },
+        "carburo":  { "torneado": 100, "fresado": 80,  "taladrado": 75  },
+        "ceramica": { "torneado": 240, "fresado": 0,   "taladrado": 0   },
+        "cbn":      { "torneado": 350, "fresado": 0,   "taladrado": 0   }
+      }
+    },
+    {
+      "id": "acero_alto",
+      "label": "Acero Alto Carbono",
+      "group": "Aceros",
+      "hardness": "HB 250-320",
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 18,  "fresado": 15,  "taladrado": 16  },
+        "carburo":  { "torneado": 80,  "fresado": 65,  "taladrado": 60  },
+        "ceramica": { "torneado": 200, "fresado": 0,   "taladrado": 0   },
+        "cbn":      { "torneado": 300, "fresado": 0,   "taladrado": 0   }
+      }
+    },
+    {
+      "id": "acero_inox",
+      "label": "Acero Inoxidable 304",
+      "group": "Aceros",
+      "hardness": "HB 150-200",
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 15,  "fresado": 12,  "taladrado": 10  },
+        "carburo":  { "torneado": 60,  "fresado": 50,  "taladrado": 45  },
+        "ceramica": { "torneado": 150, "fresado": 0,   "taladrado": 0   },
+        "cbn":      { "torneado": 200, "fresado": 0,   "taladrado": 0   }
+      }
+    },
+    {
+      "id": "acero_inox_316",
+      "label": "Acero Inoxidable 316",
+      "group": "Aceros",
+      "hardness": "HB 160-210",
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 12,  "fresado": 10,  "taladrado": 8   },
+        "carburo":  { "torneado": 50,  "fresado": 40,  "taladrado": 38  },
+        "ceramica": { "torneado": 130, "fresado": 0,   "taladrado": 0   },
+        "cbn":      { "torneado": 180, "fresado": 0,   "taladrado": 0   }
+      }
+    },
+    {
+      "id": "hierro_gris",
+      "label": "Hierro Fundido Gris",
+      "group": "Hierros",
+      "hardness": "HB 180-260",
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 25,  "fresado": 20,  "taladrado": 22  },
+        "carburo":  { "torneado": 100, "fresado": 80,  "taladrado": 75  },
+        "ceramica": { "torneado": 300, "fresado": 180, "taladrado": 0   },
+        "cbn":      { "torneado": 450, "fresado": 0,   "taladrado": 0   }
+      }
+    },
+    {
+      "id": "hierro_nodular",
+      "label": "Hierro Fundido Nodular",
+      "group": "Hierros",
+      "hardness": "HB 200-280",
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 20,  "fresado": 18,  "taladrado": 18  },
+        "carburo":  { "torneado": 85,  "fresado": 70,  "taladrado": 65  },
+        "ceramica": { "torneado": 250, "fresado": 150, "taladrado": 0   },
+        "cbn":      { "torneado": 380, "fresado": 0,   "taladrado": 0   }
+      }
+    },
+    {
+      "id": "aluminio",
+      "label": "Aluminio (Aleaciones)",
+      "group": "No Ferrosos",
+      "hardness": "HB 30-80",
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 100, "fresado": 80,  "taladrado": 90  },
+        "carburo":  { "torneado": 300, "fresado": 250, "taladrado": 220 },
+        "ceramica": { "torneado": 600, "fresado": 400, "taladrado": 0   },
+        "cbn":      { "torneado": 800, "fresado": 600, "taladrado": 0   }
+      }
+    },
+    {
+      "id": "bronce",
+      "label": "Bronce / Latón",
+      "group": "No Ferrosos",
+      "hardness": "HB 80-150",
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 50,  "fresado": 40,  "taladrado": 45  },
+        "carburo":  { "torneado": 150, "fresado": 120, "taladrado": 110 },
+        "ceramica": { "torneado": 0,   "fresado": 0,   "taladrado": 0   },
+        "cbn":      { "torneado": 0,   "fresado": 0,   "taladrado": 0   }
+      }
+    },
+    {
+      "id": "cobre",
+      "label": "Cobre",
+      "group": "No Ferrosos",
+      "hardness": "HB 40-90",
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 60,  "fresado": 50,  "taladrado": 55  },
+        "carburo":  { "torneado": 180, "fresado": 150, "taladrado": 140 },
+        "ceramica": { "torneado": 0,   "fresado": 0,   "taladrado": 0   },
+        "cbn":      { "torneado": 0,   "fresado": 0,   "taladrado": 0   }
+      }
+    },
+    {
+      "id": "titanio",
+      "label": "Titanio Ti-6Al-4V",
+      "group": "Especiales",
+      "hardness": "HB 300-370",
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 8,   "fresado": 6,   "taladrado": 5   },
+        "carburo":  { "torneado": 40,  "fresado": 30,  "taladrado": 25  },
+        "ceramica": { "torneado": 0,   "fresado": 0,   "taladrado": 0   },
+        "cbn":      { "torneado": 100, "fresado": 0,   "taladrado": 0   }
+      }
+    },
+    {
+      "id": "plastico",
+      "label": "Plástico (Nylon / PVC)",
+      "group": "No Metálicos",
+      "hardness": "Shore 60-85",
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 80,  "fresado": 60,  "taladrado": 70  },
+        "carburo":  { "torneado": 200, "fresado": 160, "taladrado": 150 },
+        "ceramica": { "torneado": 0,   "fresado": 0,   "taladrado": 0   },
+        "cbn":      { "torneado": 0,   "fresado": 0,   "taladrado": 0   }
+      }
+    }
+  ],
+
+  "operations": {
+    "torneado": {
+      "id": "torneado",
+      "label": "Torneado",
+      "icon": "◎",
+      "description": "Mecanizado en torno por rotación de la pieza",
+      "formula": {
+        "S": "S = (1000 × Vc) / (π × D)",
+        "F": "F = f × S",
+        "t": "t = L / F"
+      },
+      "variables": [
+        { "id": "D",  "label": "Diámetro de la pieza (D)", "unit": "mm",     "min": 1,    "max": 2000, "step": 0.1,  "default": 50  },
+        { "id": "L",  "label": "Longitud de corte (L)",     "unit": "mm",     "min": 1,    "max": 5000, "step": 0.1,  "default": 100 },
+        { "id": "f",  "label": "Avance por revolución (f)", "unit": "mm/rev", "min": 0.01, "max": 2,    "step": 0.01, "default": 0.2 }
+      ],
+      "feedSuggestions": {
+        "desbaste":       { "label": "Desbaste",    "range": "0.25 – 0.50",  "typical": 0.35 },
+        "semiacabado":    { "label": "Semiacabado", "range": "0.10 – 0.25",  "typical": 0.15 },
+        "acabado":        { "label": "Acabado",     "range": "0.05 – 0.10",  "typical": 0.07 }
+      }
+    },
+    "fresado": {
+      "id": "fresado",
+      "label": "Fresado",
+      "icon": "✦",
+      "description": "Mecanizado por rotación de la herramienta (fresa)",
+      "formula": {
+        "S": "S = (1000 × Vc) / (π × D)",
+        "F": "F = fz × Z × S",
+        "t": "t = L / F"
+      },
+      "variables": [
+        { "id": "D",  "label": "Diámetro de la fresa (D)",  "unit": "mm",          "min": 1,    "max": 500,  "step": 0.1,  "default": 20  },
+        { "id": "L",  "label": "Longitud de corte (L)",      "unit": "mm",          "min": 1,    "max": 5000, "step": 0.1,  "default": 100 },
+        { "id": "Z",  "label": "Número de dientes (Z)",      "unit": "dientes",     "min": 1,    "max": 20,   "step": 1,    "default": 4   },
+        { "id": "fz", "label": "Avance por diente (fz)",     "unit": "mm/diente",   "min": 0.001,"max": 1,    "step": 0.001,"default": 0.05}
+      ],
+      "feedSuggestions": {
+        "desbaste":    { "label": "Desbaste",    "range": "0.05 – 0.20", "typical": 0.12 },
+        "semiacabado": { "label": "Semiacabado", "range": "0.02 – 0.05", "typical": 0.03 },
+        "acabado":     { "label": "Acabado",     "range": "0.01 – 0.02", "typical": 0.015}
+      }
+    },
+    "taladrado": {
+      "id": "taladrado",
+      "label": "Taladrado",
+      "icon": "▼",
+      "description": "Mecanizado de agujeros por rotación de la broca",
+      "formula": {
+        "S": "S = (1000 × Vc) / (π × D)",
+        "F": "F = f × S",
+        "t": "t = (L + 0.3 × D) / F"
+      },
+      "variables": [
+        { "id": "D", "label": "Diámetro de la broca (D)", "unit": "mm",     "min": 0.5,  "max": 100,  "step": 0.1,  "default": 10  },
+        { "id": "L", "label": "Profundidad del agujero (L)", "unit": "mm",   "min": 1,    "max": 1000, "step": 0.1,  "default": 30  },
+        { "id": "f", "label": "Avance por revolución (f)",   "unit": "mm/rev","min": 0.01,"max": 1,    "step": 0.01, "default": 0.1 }
+      ],
+      "feedSuggestions": {
+        "D_menor_5":    { "label": "D < 5 mm",      "range": "0.05 – 0.10", "typical": 0.07  },
+        "D_5_15":       { "label": "5 ≤ D < 15 mm", "range": "0.10 – 0.20", "typical": 0.15  },
+        "D_15_30":      { "label": "15 ≤ D < 30 mm","range": "0.20 – 0.35", "typical": 0.25  },
+        "D_mayor_30":   { "label": "D ≥ 30 mm",     "range": "0.30 – 0.50", "typical": 0.40  }
+      }
+    }
+  },
+
+  "passTypes": {
+    "desbaste":    { "id": "desbaste",    "label": "Desbaste",    "color": "#e74c3c" },
+    "semiacabado": { "id": "semiacabado", "label": "Semiacabado", "color": "#f39c12" },
+    "acabado":     { "id": "acabado",     "label": "Acabado",     "color": "#2ecc71" }
+  },
+
+  "unitConversions": {
+    "note": "S en rev/min (rpm), F en mm/min, t en min",
+    "Pi": 3.14159265358979
+  }
+}
