@@ -4,161 +4,510 @@
     "subtitle": "Procesos de Manufactura Moderna",
     "institution": "Pontificia Universidad Javeriana",
     "department": "Ingeniería Industrial",
-    "version": "1.0.0"
+    "version": "3.1.0",
+    "sources": [
+      "ESPECIFICACIONES TÉCNICAS DE MATERIALES DE INGENIERÍA – PUJ",
+      "Especificaciones de Máquinas de Mecanizado – PUJ"
+    ],
+    "note": "Los valores Vc para HSS y Carburo en los 5 materiales del PDF corresponden al punto medio del rango oficial. Cerámica y CBN se calculan por factores técnicos estándar. Fresado = 80% del torneado. Taladrado = 75% del torneado. NUNCA hay combinación con Vc=0; todas tienen un valor mínimo funcional."
+  },
+
+  "machineSpecs": {
+    "torno": {
+      "name": "Torno Convencional",
+      "description": "Máquina para mecanizado de piezas cilíndricas por rotación de la pieza. La herramienta avanza en línea recta.",
+      "rpmMin": 40,
+      "rpmMax": 3000,
+      "feedLongMinMmRev": 0.04,
+      "feedLongMaxMmRev": 2.0,
+      "feedTransMinMmRev": 0.02,
+      "feedTransMaxMmRev": 1.0,
+      "diamMaxSobreBancadaMm": 600,
+      "diamSobreCarroMm": 400,
+      "distanciaCentrosMm": 3000,
+      "potencia": "1 – 15 HP",
+      "precision": "±0.02 mm",
+      "material": "Estructura en hierro fundido para absorber vibraciones",
+      "sistemasRosca": "Métricas e imperiales (Caja Norton)",
+      "herramientas": ["Buril HSS", "Buril de carburo", "Insertos intercambiables", "Herramienta de roscado", "Herramienta tronzadora", "Broca helicoidal", "Escariador", "Machuelo"],
+      "piezasFabricables": ["Ejes de transmisión", "Bujes", "Pernos especiales", "Tornillos personalizados", "Poleas", "Rodillos industriales", "Componentes automotrices", "Pasadores mecánicos"],
+      "alertaRpm": "Si S calculado supera 3000 rpm, usa 3000 rpm y reduce Vc proporcionalmente."
+    },
+    "fresadora": {
+      "name": "Fresadora",
+      "description": "Máquina donde la herramienta (fresa) gira mientras la pieza se desplaza en X, Y, Z para fabricar piezas prismáticas, ranuras y geometrías complejas.",
+      "rpmMin": 60,
+      "rpmMax": 6000,
+      "recorridoXMm": 1500,
+      "recorridoYMm": 800,
+      "recorridoZMm": 700,
+      "potencia": "2 – 20 HP",
+      "precision": "±0.01 – 0.05 mm",
+      "conoHusillo": "ISO 40, R8 o Morse",
+      "sistemasRefrigeracion": true,
+      "herramientas": ["Fresa frontal", "Fresa de punta plana", "Fresa esférica", "Fresa de disco", "Fresa cola de milano", "Fresa en T", "Fresa para engranajes", "Portapinzas ER"],
+      "piezasFabricables": ["Engranajes", "Chaveteros", "Placas mecanizadas", "Moldes industriales", "Bases de maquinaria", "Carcasas metálicas", "Soportes estructurales", "Componentes aeronáuticos"],
+      "alertaRpm": "Si S calculado supera 6000 rpm, reduce Vc usando una herramienta de mayor rendimiento o ajusta diámetro."
+    },
+    "taladro": {
+      "name": "Taladro de Columna",
+      "description": "Máquina diseñada para perforaciones precisas mediante rotación vertical de la broca que penetra el material.",
+      "rpmMin": 200,
+      "rpmMax": 3000,
+      "capacidadMaxBrocaMm": 32,
+      "recorridoHusilloMm": 150,
+      "mandrilMm": "1 – 16 mm (estándar) / hasta 32 mm con portabrocas especial)",
+      "mesaInclinable": "hasta 45°",
+      "sistemaTopeProfundidad": true,
+      "potencia": "0.5 – 5 HP",
+      "precision": "±0.1 mm",
+      "herramientas": ["Broca helicoidal", "Broca escalonada", "Broca de centro", "Avellanador", "Escariador", "Machuelo"],
+      "piezasFabricables": ["Placas perforadas", "Soportes atornillados", "Estructuras metálicas", "Componentes ensamblables", "Piezas con rosca interna", "Bases estructurales perforadas"],
+      "alertaRpm": "Capacidad máxima de broca: 32 mm. Para brocas mayores usa torno o fresadora. Si S supera 3000 rpm, usa 3000 rpm."
+    }
   },
 
   "toolMaterials": [
-    { "id": "hss",       "label": "Acero Rápido (HSS)",    "icon": "⚙️" },
-    { "id": "carburo",   "label": "Carburo Cementado",     "icon": "💎" },
-    { "id": "ceramica",  "label": "Cerámica",              "icon": "🔬" },
-    { "id": "cbn",       "label": "CBN / Diamante",        "icon": "✦"  }
+    {
+      "id": "hss",
+      "label": "Acero Rápido (HSS)",
+      "icon": "⚙️",
+      "description": "Herramienta más común y económica en talleres universitarios. Ideal para velocidades bajas. Se puede reafilar. Resiste hasta ~600°C.",
+      "identifyBy": "Mango gris oscuro. Inscripción 'HSS', 'M2' o 'M42'.",
+      "velocidadRango": "Vc típica: 10 – 150 m/min",
+      "costRelativo": "★☆☆☆ Muy económica"
+    },
+    {
+      "id": "carburo",
+      "label": "Carburo Cementado (WC-Co)",
+      "icon": "💎",
+      "description": "Muy dura y resistente al calor (resiste hasta ~900°C). Permite velocidades 3–5× mayores que el HSS. Insertos intercambiables casi siempre son de carburo. Marcado 'HM', 'WC', 'Carbide' o código ISO.",
+      "identifyBy": "Filo brillante gris claro. Inscripción 'HM', 'WC', 'Carbide' o código P10/M20/K30.",
+      "velocidadRango": "Vc típica: 60 – 600 m/min",
+      "costRelativo": "★★★☆ Precio medio-alto"
+    },
+    {
+      "id": "ceramica",
+      "label": "Cerámica (Al₂O₃ / Si₃N₄)",
+      "icon": "🔬",
+      "description": "Para velocidades muy altas en materiales duros (hierros fundidos, aceros). Frágil ante impactos y vibraciones. Resiste hasta ~1200°C. Insertos de color blanco/crema o negro. No apta para taladrado.",
+      "identifyBy": "Inserto blanco/crema o negro. No tiene mango tipo HSS.",
+      "velocidadRango": "Vc típica: 120 – 800 m/min",
+      "costRelativo": "★★★★ Cara, uso especializado"
+    },
+    {
+      "id": "cbn",
+      "label": "CBN / PCBN (Nitruro de Boro Cúbico)",
+      "icon": "✦",
+      "description": "Segunda herramienta más dura después del diamante. Para materiales muy duros y endurecidos. Resiste hasta ~1400°C. Insertos oscuros con capa dorada o negra. Muy costosa. No apta para taladrado.",
+      "identifyBy": "Inserto oscuro con capa dorada, negra o violeta. Etiqueta de alto costo.",
+      "velocidadRango": "Vc típica: 200 – 1200 m/min",
+      "costRelativo": "★★★★ Muy cara, alta producción"
+    }
   ],
 
   "workpieceMaterials": [
+
     {
-      "id": "acero_suave",
-      "label": "Acero Suave (Bajo Carbono)",
-      "group": "Aceros",
-      "hardness": "HB 120-180",
+      "id": "aluminio_6061",
+      "label": "Aluminio 6061-T6 ★ (PDF)",
+      "group": "No Ferrosos – PDF Asignatura",
+      "hardness": "HB 95",
+      "density": "2.70 g/cm³",
+      "youngsModulus": "68.9 GPa",
+      "tensileStrength": "310 MPa (45,000 psi)",
+      "machinability": "50%",
+      "behavior": "Genera viruta continua. Requiere ángulos de desprendimiento grandes (15°–20°) para evitar el embotellamiento. Excelente maquinabilidad.",
+      "refrigerant": "Recomendado (taladrina o fluido de corte para aluminio)",
+      "sourcePDF": true,
+      "vcRanges": {
+        "hss_min": 80, "hss_max": 150,
+        "carburo_min": 200, "carburo_max": 600
+      },
       "cuttingSpeeds": {
-        "hss":      { "torneado": 30,  "fresado": 25,  "taladrado": 28  },
-        "carburo":  { "torneado": 120, "fresado": 100, "taladrado": 90  },
-        "ceramica": { "torneado": 280, "fresado": 0,   "taladrado": 0   },
-        "cbn":      { "torneado": 400, "fresado": 0,   "taladrado": 0   }
+        "hss":      { "torneado": 115, "fresado": 92,  "taladrado": 86  },
+        "carburo":  { "torneado": 400, "fresado": 320, "taladrado": 300 },
+        "ceramica": { "torneado": 700, "fresado": 560, "taladrado": 50  },
+        "cbn":      { "torneado": 1000,"fresado": 800, "taladrado": 30  }
       }
     },
+
     {
-      "id": "acero_medio",
-      "label": "Acero Medio Carbono",
-      "group": "Aceros",
-      "hardness": "HB 180-250",
+      "id": "bronce_sae660",
+      "label": "Bronce SAE 660 / ASTM B505 ★ (PDF)",
+      "group": "No Ferrosos – PDF Asignatura",
+      "hardness": "HB 65–75",
+      "density": "8.90 g/cm³",
+      "youngsModulus": "105 GPa",
+      "tensileStrength": "240 MPa (35,000 psi)",
+      "machinability": "40%",
+      "behavior": "Material de elementos de sacrificio y fricción. Excelente estabilidad dimensional. Viruta granular (fragmentada). Puede mecanizarse en seco.",
+      "refrigerant": "Opcional — puede mecanizarse en seco",
+      "sourcePDF": true,
+      "vcRanges": {
+        "hss_min": 30, "hss_max": 60,
+        "carburo_min": 120, "carburo_max": 180
+      },
       "cuttingSpeeds": {
-        "hss":      { "torneado": 25,  "fresado": 20,  "taladrado": 22  },
+        "hss":      { "torneado": 45,  "fresado": 36,  "taladrado": 34  },
+        "carburo":  { "torneado": 150, "fresado": 120, "taladrado": 113 },
+        "ceramica": { "torneado": 220, "fresado": 176, "taladrado": 30  },
+        "cbn":      { "torneado": 320, "fresado": 256, "taladrado": 25  }
+      }
+    },
+
+    {
+      "id": "acero_1045",
+      "label": "Acero AISI 1045 (Carbono Medio) ★ (PDF)",
+      "group": "Aceros – PDF Asignatura",
+      "hardness": "HB 163 (estado recocido)",
+      "density": "7.85 g/cm³",
+      "youngsModulus": "200 GPa",
+      "tensileStrength": "570 MPa (82,700 psi)",
+      "machinability": "65%",
+      "behavior": "IMPORTANTE: Requiere control de viruta (rompevirutas) y refrigeración CONSTANTE para evitar desgaste de flanco. Material base para transmisión de potencia.",
+      "refrigerant": "OBLIGATORIO — refrigeración constante durante todo el proceso",
+      "sourcePDF": true,
+      "vcRanges": {
+        "hss_min": 25, "hss_max": 35,
+        "carburo_min": 150, "carburo_max": 250
+      },
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 30,  "fresado": 24,  "taladrado": 23  },
+        "carburo":  { "torneado": 200, "fresado": 160, "taladrado": 150 },
+        "ceramica": { "torneado": 380, "fresado": 304, "taladrado": 28  },
+        "cbn":      { "torneado": 550, "fresado": 440, "taladrado": 25  }
+      }
+    },
+
+    {
+      "id": "laton_c360",
+      "label": "Latón C360 Free-Cutting ★ (PDF)",
+      "group": "No Ferrosos – PDF Asignatura",
+      "hardness": "HB 75",
+      "density": "8.50 g/cm³",
+      "youngsModulus": "97 GPa",
+      "tensileStrength": "340 MPa (49,000 psi)",
+      "machinability": "100%",
+      "behavior": "Referente mundial de maquinabilidad (índice 100%). Maquinado en seco posible. Ángulos de desprendimiento neutros (0°) para evitar que la herramienta se clave. Viruta corta y quebradiza.",
+      "refrigerant": "Opcional — puede mecanizarse en seco sin problemas",
+      "sourcePDF": true,
+      "vcRanges": {
+        "hss_min": 60, "hss_max": 100,
+        "carburo_min": 180, "carburo_max": 450
+      },
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 80,  "fresado": 64,  "taladrado": 60  },
+        "carburo":  { "torneado": 315, "fresado": 252, "taladrado": 236 },
+        "ceramica": { "torneado": 500, "fresado": 400, "taladrado": 40  },
+        "cbn":      { "torneado": 700, "fresado": 560, "taladrado": 35  }
+      }
+    },
+
+    {
+      "id": "acero_inox_304",
+      "label": "Acero Inoxidable AISI 304 (Austenítico) ★ (PDF)",
+      "group": "Aceros – PDF Asignatura",
+      "hardness": "HB 123–170",
+      "density": "8.00 g/cm³",
+      "youngsModulus": "193 GPa",
+      "tensileStrength": "515 MPa (74,700 psi)",
+      "machinability": "45%",
+      "behavior": "CRÍTICO: tendencia al endurecimiento por deformación. NUNCA detener la herramienta sobre la pieza. Mantener avance constante para que siempre corte material nuevo. Refrigeración abundante.",
+      "refrigerant": "OBLIGATORIO y abundante — refrigeración permanente durante todo el proceso",
+      "sourcePDF": true,
+      "vcRanges": {
+        "hss_min": 10, "hss_max": 15,
+        "carburo_min": 80, "carburo_max": 120
+      },
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 12,  "fresado": 10,  "taladrado": 9   },
         "carburo":  { "torneado": 100, "fresado": 80,  "taladrado": 75  },
-        "ceramica": { "torneado": 240, "fresado": 0,   "taladrado": 0   },
-        "cbn":      { "torneado": 350, "fresado": 0,   "taladrado": 0   }
+        "ceramica": { "torneado": 180, "fresado": 144, "taladrado": 20  },
+        "cbn":      { "torneado": 260, "fresado": 208, "taladrado": 18  }
       }
     },
+
     {
-      "id": "acero_alto",
-      "label": "Acero Alto Carbono",
+      "id": "acero_suave_1018",
+      "label": "Acero Suave Bajo Carbono (AISI 1018)",
       "group": "Aceros",
-      "hardness": "HB 250-320",
+      "hardness": "HB 120–180",
+      "density": "7.85 g/cm³",
+      "youngsModulus": "200 GPa",
+      "tensileStrength": "340 MPa",
+      "machinability": "78%",
+      "behavior": "Fácil de mecanizar. Genera viruta larga — usar rompevirutas si es necesario. El material de construcción estructural más común en talleres.",
+      "refrigerant": "Recomendado",
+      "sourcePDF": false,
       "cuttingSpeeds": {
-        "hss":      { "torneado": 18,  "fresado": 15,  "taladrado": 16  },
-        "carburo":  { "torneado": 80,  "fresado": 65,  "taladrado": 60  },
-        "ceramica": { "torneado": 200, "fresado": 0,   "taladrado": 0   },
-        "cbn":      { "torneado": 300, "fresado": 0,   "taladrado": 0   }
+        "hss":      { "torneado": 35,  "fresado": 28,  "taladrado": 26  },
+        "carburo":  { "torneado": 140, "fresado": 112, "taladrado": 105 },
+        "ceramica": { "torneado": 300, "fresado": 240, "taladrado": 22  },
+        "cbn":      { "torneado": 450, "fresado": 360, "taladrado": 20  }
       }
     },
+
     {
-      "id": "acero_inox",
-      "label": "Acero Inoxidable 304",
+      "id": "acero_medio_generico",
+      "label": "Acero Carbono Medio Genérico (HB 180–250)",
       "group": "Aceros",
-      "hardness": "HB 150-200",
+      "hardness": "HB 180–250",
+      "density": "7.85 g/cm³",
+      "youngsModulus": "200 GPa",
+      "tensileStrength": "450–620 MPa",
+      "machinability": "65%",
+      "behavior": "Amplia familia de aceros de uso general. Buena relación resistencia / maquinabilidad. Requiere refrigeración en operaciones largas.",
+      "refrigerant": "Recomendado",
+      "sourcePDF": false,
       "cuttingSpeeds": {
-        "hss":      { "torneado": 15,  "fresado": 12,  "taladrado": 10  },
-        "carburo":  { "torneado": 60,  "fresado": 50,  "taladrado": 45  },
-        "ceramica": { "torneado": 150, "fresado": 0,   "taladrado": 0   },
-        "cbn":      { "torneado": 200, "fresado": 0,   "taladrado": 0   }
+        "hss":      { "torneado": 25,  "fresado": 20,  "taladrado": 19  },
+        "carburo":  { "torneado": 110, "fresado": 88,  "taladrado": 83  },
+        "ceramica": { "torneado": 260, "fresado": 208, "taladrado": 20  },
+        "cbn":      { "torneado": 380, "fresado": 304, "taladrado": 18  }
       }
     },
+
+    {
+      "id": "acero_alto_carbono",
+      "label": "Acero Alto Carbono (AISI 1080–1095)",
+      "group": "Aceros",
+      "hardness": "HB 250–320",
+      "density": "7.85 g/cm³",
+      "youngsModulus": "200 GPa",
+      "tensileStrength": "800–1000 MPa",
+      "machinability": "40%",
+      "behavior": "Duro y resistente al desgaste. Requiere carburo obligatoriamente. Genera viruta corta y caliente. Refrigeración constante.",
+      "refrigerant": "Obligatorio",
+      "sourcePDF": false,
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 18,  "fresado": 14,  "taladrado": 13  },
+        "carburo":  { "torneado": 90,  "fresado": 72,  "taladrado": 68  },
+        "ceramica": { "torneado": 220, "fresado": 176, "taladrado": 18  },
+        "cbn":      { "torneado": 380, "fresado": 304, "taladrado": 15  }
+      }
+    },
+
     {
       "id": "acero_inox_316",
-      "label": "Acero Inoxidable 316",
+      "label": "Acero Inoxidable AISI 316L",
       "group": "Aceros",
-      "hardness": "HB 160-210",
+      "hardness": "HB 160–210",
+      "density": "8.00 g/cm³",
+      "youngsModulus": "193 GPa",
+      "tensileStrength": "550 MPa",
+      "machinability": "40%",
+      "behavior": "Más resistente a la corrosión que el 304 pero aún más difícil de mecanizar. Tendencia al endurecimiento por deformación. Avance constante OBLIGATORIO.",
+      "refrigerant": "Obligatorio y abundante",
+      "sourcePDF": false,
       "cuttingSpeeds": {
-        "hss":      { "torneado": 12,  "fresado": 10,  "taladrado": 8   },
-        "carburo":  { "torneado": 50,  "fresado": 40,  "taladrado": 38  },
-        "ceramica": { "torneado": 130, "fresado": 0,   "taladrado": 0   },
-        "cbn":      { "torneado": 180, "fresado": 0,   "taladrado": 0   }
+        "hss":      { "torneado": 10,  "fresado": 8,   "taladrado": 7   },
+        "carburo":  { "torneado": 80,  "fresado": 64,  "taladrado": 60  },
+        "ceramica": { "torneado": 160, "fresado": 128, "taladrado": 18  },
+        "cbn":      { "torneado": 230, "fresado": 184, "taladrado": 15  }
       }
     },
+
+    {
+      "id": "acero_inox_duplex",
+      "label": "Acero Inoxidable Dúplex (2205)",
+      "group": "Aceros",
+      "hardness": "HB 217–270",
+      "density": "7.80 g/cm³",
+      "youngsModulus": "195 GPa",
+      "tensileStrength": "620 MPa",
+      "machinability": "30%",
+      "behavior": "Alta resistencia. Endurecimiento por deformación muy pronunciado. Herramientas de carburo o CBN recomendadas. Refrigeración abundante obligatoria.",
+      "refrigerant": "Obligatorio y abundante",
+      "sourcePDF": false,
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 8,   "fresado": 6,   "taladrado": 6   },
+        "carburo":  { "torneado": 65,  "fresado": 52,  "taladrado": 49  },
+        "ceramica": { "torneado": 140, "fresado": 112, "taladrado": 15  },
+        "cbn":      { "torneado": 200, "fresado": 160, "taladrado": 12  }
+      }
+    },
+
+    {
+      "id": "acero_herramienta_d2",
+      "label": "Acero para Herramienta (AISI D2 / H13) — Recocido",
+      "group": "Aceros",
+      "hardness": "HB 180–220 (recocido)",
+      "density": "7.70–7.85 g/cm³",
+      "youngsModulus": "205 GPa",
+      "tensileStrength": "700–900 MPa",
+      "machinability": "35%",
+      "behavior": "Solo mecanizar en estado recocido (blando). Alta aleación — carburo obligatorio. Refrigeración constante.",
+      "refrigerant": "Obligatorio",
+      "sourcePDF": false,
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 15,  "fresado": 12,  "taladrado": 11  },
+        "carburo":  { "torneado": 70,  "fresado": 56,  "taladrado": 53  },
+        "ceramica": { "torneado": 180, "fresado": 144, "taladrado": 15  },
+        "cbn":      { "torneado": 300, "fresado": 240, "taladrado": 12  }
+      }
+    },
+
     {
       "id": "hierro_gris",
-      "label": "Hierro Fundido Gris",
-      "group": "Hierros",
-      "hardness": "HB 180-260",
+      "label": "Hierro Fundido Gris (FC-200 / GG25)",
+      "group": "Hierros Fundidos",
+      "hardness": "HB 180–260",
+      "density": "7.20 g/cm³",
+      "youngsModulus": "100–170 GPa",
+      "tensileStrength": "200–280 MPa",
+      "machinability": "70%",
+      "behavior": "Viruta en polvo — NO forma viruta continua. Cerámica muy eficiente. Puede mecanizarse en seco. Material estructural y de amortiguación.",
+      "refrigerant": "Generalmente en seco. Si se usa refrigerante, debe ser constante.",
+      "sourcePDF": false,
       "cuttingSpeeds": {
-        "hss":      { "torneado": 25,  "fresado": 20,  "taladrado": 22  },
-        "carburo":  { "torneado": 100, "fresado": 80,  "taladrado": 75  },
-        "ceramica": { "torneado": 300, "fresado": 180, "taladrado": 0   },
-        "cbn":      { "torneado": 450, "fresado": 0,   "taladrado": 0   }
+        "hss":      { "torneado": 28,  "fresado": 22,  "taladrado": 21  },
+        "carburo":  { "torneado": 110, "fresado": 88,  "taladrado": 83  },
+        "ceramica": { "torneado": 400, "fresado": 320, "taladrado": 30  },
+        "cbn":      { "torneado": 600, "fresado": 480, "taladrado": 25  }
       }
     },
+
     {
       "id": "hierro_nodular",
-      "label": "Hierro Fundido Nodular",
-      "group": "Hierros",
-      "hardness": "HB 200-280",
+      "label": "Hierro Fundido Nodular (FE-500 / GGG50)",
+      "group": "Hierros Fundidos",
+      "hardness": "HB 200–280",
+      "density": "7.10 g/cm³",
+      "youngsModulus": "160–180 GPa",
+      "tensileStrength": "500 MPa",
+      "machinability": "55%",
+      "behavior": "Mayor tenacidad que el fundido gris. Viruta corta pero más continua. Herramientas más robustas. Buena alternativa al acero para piezas estructurales.",
+      "refrigerant": "Opcional",
+      "sourcePDF": false,
       "cuttingSpeeds": {
-        "hss":      { "torneado": 20,  "fresado": 18,  "taladrado": 18  },
-        "carburo":  { "torneado": 85,  "fresado": 70,  "taladrado": 65  },
-        "ceramica": { "torneado": 250, "fresado": 150, "taladrado": 0   },
-        "cbn":      { "torneado": 380, "fresado": 0,   "taladrado": 0   }
+        "hss":      { "torneado": 22,  "fresado": 18,  "taladrado": 16  },
+        "carburo":  { "torneado": 90,  "fresado": 72,  "taladrado": 68  },
+        "ceramica": { "torneado": 300, "fresado": 240, "taladrado": 25  },
+        "cbn":      { "torneado": 450, "fresado": 360, "taladrado": 20  }
       }
     },
+
     {
-      "id": "aluminio",
-      "label": "Aluminio (Aleaciones)",
+      "id": "aluminio_general",
+      "label": "Aluminio General (2024 / 7075)",
       "group": "No Ferrosos",
-      "hardness": "HB 30-80",
+      "hardness": "HB 60–130",
+      "density": "2.70–2.82 g/cm³",
+      "youngsModulus": "70–73 GPa",
+      "tensileStrength": "290–503 MPa",
+      "machinability": "60%",
+      "behavior": "Excelente maquinabilidad. Viruta continua. Ángulos de corte positivos recomendados. Puede adherirse a la herramienta (Built-Up Edge).",
+      "refrigerant": "Recomendado (fluido para aluminio)",
+      "sourcePDF": false,
       "cuttingSpeeds": {
-        "hss":      { "torneado": 100, "fresado": 80,  "taladrado": 90  },
-        "carburo":  { "torneado": 300, "fresado": 250, "taladrado": 220 },
-        "ceramica": { "torneado": 600, "fresado": 400, "taladrado": 0   },
-        "cbn":      { "torneado": 800, "fresado": 600, "taladrado": 0   }
+        "hss":      { "torneado": 100, "fresado": 80,  "taladrado": 75  },
+        "carburo":  { "torneado": 280, "fresado": 224, "taladrado": 210 },
+        "ceramica": { "torneado": 600, "fresado": 480, "taladrado": 45  },
+        "cbn":      { "torneado": 900, "fresado": 720, "taladrado": 35  }
       }
     },
-    {
-      "id": "bronce",
-      "label": "Bronce / Latón",
-      "group": "No Ferrosos",
-      "hardness": "HB 80-150",
-      "cuttingSpeeds": {
-        "hss":      { "torneado": 50,  "fresado": 40,  "taladrado": 45  },
-        "carburo":  { "torneado": 150, "fresado": 120, "taladrado": 110 },
-        "ceramica": { "torneado": 0,   "fresado": 0,   "taladrado": 0   },
-        "cbn":      { "torneado": 0,   "fresado": 0,   "taladrado": 0   }
-      }
-    },
+
     {
       "id": "cobre",
-      "label": "Cobre",
+      "label": "Cobre Electrolítico (Cu-ETP)",
       "group": "No Ferrosos",
-      "hardness": "HB 40-90",
+      "hardness": "HB 40–90",
+      "density": "8.94 g/cm³",
+      "youngsModulus": "117 GPa",
+      "tensileStrength": "200–250 MPa",
+      "machinability": "20%",
+      "behavior": "Blando y dúctil — tiende a adherirse a la herramienta. Viruta larga y pegajosa. Herramientas muy afiladas y velocidades altas. Difícil a pesar de ser blando.",
+      "refrigerant": "Recomendado",
+      "sourcePDF": false,
       "cuttingSpeeds": {
-        "hss":      { "torneado": 60,  "fresado": 50,  "taladrado": 55  },
-        "carburo":  { "torneado": 180, "fresado": 150, "taladrado": 140 },
-        "ceramica": { "torneado": 0,   "fresado": 0,   "taladrado": 0   },
-        "cbn":      { "torneado": 0,   "fresado": 0,   "taladrado": 0   }
+        "hss":      { "torneado": 55,  "fresado": 44,  "taladrado": 41  },
+        "carburo":  { "torneado": 160, "fresado": 128, "taladrado": 120 },
+        "ceramica": { "torneado": 280, "fresado": 224, "taladrado": 22  },
+        "cbn":      { "torneado": 400, "fresado": 320, "taladrado": 18  }
       }
     },
+
+    {
+      "id": "bronce_general",
+      "label": "Bronce / Latón General (Aleaciones Cu-Zn / Cu-Sn)",
+      "group": "No Ferrosos",
+      "hardness": "HB 60–150",
+      "density": "8.30–8.90 g/cm³",
+      "youngsModulus": "96–115 GPa",
+      "tensileStrength": "230–380 MPa",
+      "machinability": "60%",
+      "behavior": "Buena maquinabilidad. Viruta fragmentada. Puede mecanizarse en seco en muchos casos. Amplia familia de aleaciones.",
+      "refrigerant": "Opcional",
+      "sourcePDF": false,
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 50,  "fresado": 40,  "taladrado": 38  },
+        "carburo":  { "torneado": 150, "fresado": 120, "taladrado": 113 },
+        "ceramica": { "torneado": 250, "fresado": 200, "taladrado": 22  },
+        "cbn":      { "torneado": 360, "fresado": 288, "taladrado": 18  }
+      }
+    },
+
     {
       "id": "titanio",
-      "label": "Titanio Ti-6Al-4V",
-      "group": "Especiales",
-      "hardness": "HB 300-370",
+      "label": "Titanio Ti-6Al-4V (Grado 5)",
+      "group": "Materiales Especiales",
+      "hardness": "HB 300–370",
+      "density": "4.43 g/cm³",
+      "youngsModulus": "114 GPa",
+      "tensileStrength": "950 MPa",
+      "machinability": "20%",
+      "behavior": "DIFÍCIL — baja conductividad térmica genera calor extremo. Velocidades muy bajas, avances constantes. Refrigeración muy abundante. Riesgo de incendio sin refrigeración.",
+      "refrigerant": "OBLIGATORIO y muy abundante — puede causar incendio en seco",
+      "sourcePDF": false,
       "cuttingSpeeds": {
         "hss":      { "torneado": 8,   "fresado": 6,   "taladrado": 5   },
-        "carburo":  { "torneado": 40,  "fresado": 30,  "taladrado": 25  },
-        "ceramica": { "torneado": 0,   "fresado": 0,   "taladrado": 0   },
-        "cbn":      { "torneado": 100, "fresado": 0,   "taladrado": 0   }
+        "carburo":  { "torneado": 45,  "fresado": 36,  "taladrado": 34  },
+        "ceramica": { "torneado": 12,  "fresado": 10,  "taladrado": 8   },
+        "cbn":      { "torneado": 110, "fresado": 88,  "taladrado": 15  }
       }
     },
+
     {
-      "id": "plastico",
-      "label": "Plástico (Nylon / PVC)",
+      "id": "nylon_pvc",
+      "label": "Plástico — Nylon / PVC / HDPE",
       "group": "No Metálicos",
-      "hardness": "Shore 60-85",
+      "hardness": "Shore D 60–85",
+      "density": "0.95–1.40 g/cm³",
+      "youngsModulus": "1–3 GPa",
+      "tensileStrength": "30–80 MPa",
+      "machinability": "90%",
+      "behavior": "Muy fácil de mecanizar. CUIDADO con el calor — se funde. Herramientas muy afiladas. Solo aire comprimido como refrigeración — nunca taladrina.",
+      "refrigerant": "Solo aire comprimido — NUNCA taladrina (daña el plástico)",
+      "sourcePDF": false,
       "cuttingSpeeds": {
-        "hss":      { "torneado": 80,  "fresado": 60,  "taladrado": 70  },
+        "hss":      { "torneado": 80,  "fresado": 64,  "taladrado": 60  },
         "carburo":  { "torneado": 200, "fresado": 160, "taladrado": 150 },
-        "ceramica": { "torneado": 0,   "fresado": 0,   "taladrado": 0   },
-        "cbn":      { "torneado": 0,   "fresado": 0,   "taladrado": 0   }
+        "ceramica": { "torneado": 15,  "fresado": 12,  "taladrado": 10  },
+        "cbn":      { "torneado": 12,  "fresado": 10,  "taladrado": 8   }
+      }
+    },
+
+    {
+      "id": "madera_mdf",
+      "label": "Madera / MDF / Compuestos de Madera",
+      "group": "No Metálicos",
+      "hardness": "Shore D 20–50",
+      "density": "0.45–0.85 g/cm³",
+      "youngsModulus": "4–12 GPa",
+      "tensileStrength": "10–50 MPa",
+      "machinability": "95%",
+      "behavior": "Muy fácil de mecanizar. Genera viruta en astillas o polvo. No requiere refrigeración. Herramientas HSS son suficientes. El MDF genera polvo fino — usar mascarilla.",
+      "refrigerant": "No requiere — mecanizado en seco",
+      "sourcePDF": false,
+      "cuttingSpeeds": {
+        "hss":      { "torneado": 120, "fresado": 96,  "taladrado": 90  },
+        "carburo":  { "torneado": 300, "fresado": 240, "taladrado": 225 },
+        "ceramica": { "torneado": 20,  "fresado": 16,  "taladrado": 12  },
+        "cbn":      { "torneado": 15,  "fresado": 12,  "taladrado": 10  }
       }
     }
+
   ],
 
   "operations": {
@@ -166,77 +515,415 @@
       "id": "torneado",
       "label": "Torneado",
       "icon": "◎",
-      "description": "Mecanizado en torno por rotación de la pieza",
+      "description": "Mecanizado en torno por rotación de la pieza. La herramienta avanza en línea recta.",
+      "machineRef": "torno",
       "formula": {
         "S": "S = (1000 × Vc) / (π × D)",
         "F": "F = f × S",
         "t": "t = L / F"
       },
+      "formulaExplained": {
+        "S": "Velocidad husillo (rpm) = 1000 × Vc(m/min) ÷ (π × D[mm])",
+        "F": "Avance total (mm/min) = avance por revolución × velocidad husillo",
+        "t": "Tiempo de corte (min) = longitud de corte ÷ velocidad de avance"
+      },
       "variables": [
-        { "id": "D",  "label": "Diámetro de la pieza (D)", "unit": "mm",     "min": 1,    "max": 2000, "step": 0.1,  "default": 50  },
-        { "id": "L",  "label": "Longitud de corte (L)",     "unit": "mm",     "min": 1,    "max": 5000, "step": 0.1,  "default": 100 },
-        { "id": "f",  "label": "Avance por revolución (f)", "unit": "mm/rev", "min": 0.01, "max": 2,    "step": 0.01, "default": 0.2 }
+        { "id": "D",  "label": "Diámetro de la pieza (D)", "unit": "mm",     "min": 1,    "max": 600,  "step": 0.1,  "default": 50  },
+        { "id": "L",  "label": "Longitud de corte (L)",    "unit": "mm",     "min": 1,    "max": 3000, "step": 0.1,  "default": 100 },
+        { "id": "f",  "label": "Avance por revolución (f)","unit": "mm/rev", "min": 0.01, "max": 2.0,  "step": 0.01, "default": 0.2 }
       ],
       "feedSuggestions": {
-        "desbaste":       { "label": "Desbaste",    "range": "0.25 – 0.50",  "typical": 0.35 },
-        "semiacabado":    { "label": "Semiacabado", "range": "0.10 – 0.25",  "typical": 0.15 },
-        "acabado":        { "label": "Acabado",     "range": "0.05 – 0.10",  "typical": 0.07 }
+        "desbaste":    { "label": "Desbaste",    "range": "0.25 – 0.50", "typical": 0.35  },
+        "semiacabado": { "label": "Semiacabado", "range": "0.10 – 0.25", "typical": 0.15  },
+        "acabado":     { "label": "Acabado",     "range": "0.05 – 0.10", "typical": 0.07  }
       }
     },
     "fresado": {
       "id": "fresado",
       "label": "Fresado",
       "icon": "✦",
-      "description": "Mecanizado por rotación de la herramienta (fresa)",
+      "description": "Mecanizado por rotación de la herramienta (fresa). La pieza avanza en X, Y, Z.",
+      "machineRef": "fresadora",
       "formula": {
-        "S": "S = (1000 × Vc) / (π × D)",
-        "F": "F = fz × Z × S",
-        "t": "t = L / F"
+        "S":  "S = (1000 × Vc) / (π × D)",
+        "F":  "F = fz × Z × S",
+        "t":  "t = L / F"
+      },
+      "formulaExplained": {
+        "S":  "Velocidad husillo (rpm) = 1000 × Vc ÷ (π × D_fresa)",
+        "F":  "Avance total (mm/min) = avance/diente × nro.dientes × rpm",
+        "t":  "Tiempo de corte (min) = longitud de pasada ÷ velocidad de avance"
       },
       "variables": [
-        { "id": "D",  "label": "Diámetro de la fresa (D)",  "unit": "mm",          "min": 1,    "max": 500,  "step": 0.1,  "default": 20  },
-        { "id": "L",  "label": "Longitud de corte (L)",      "unit": "mm",          "min": 1,    "max": 5000, "step": 0.1,  "default": 100 },
-        { "id": "Z",  "label": "Número de dientes (Z)",      "unit": "dientes",     "min": 1,    "max": 20,   "step": 1,    "default": 4   },
-        { "id": "fz", "label": "Avance por diente (fz)",     "unit": "mm/diente",   "min": 0.001,"max": 1,    "step": 0.001,"default": 0.05}
+        { "id": "D",  "label": "Diámetro de la fresa (D)",  "unit": "mm",        "min": 1,    "max": 500,  "step": 0.1,   "default": 20   },
+        { "id": "L",  "label": "Longitud de corte (L)",     "unit": "mm",        "min": 1,    "max": 1500, "step": 0.1,   "default": 100  },
+        { "id": "Z",  "label": "Número de dientes (Z)",     "unit": "dientes",   "min": 1,    "max": 20,   "step": 1,     "default": 4    },
+        { "id": "fz", "label": "Avance por diente (fz)",    "unit": "mm/diente", "min": 0.001,"max": 1.0,  "step": 0.001, "default": 0.05 }
       ],
       "feedSuggestions": {
-        "desbaste":    { "label": "Desbaste",    "range": "0.05 – 0.20", "typical": 0.12 },
-        "semiacabado": { "label": "Semiacabado", "range": "0.02 – 0.05", "typical": 0.03 },
-        "acabado":     { "label": "Acabado",     "range": "0.01 – 0.02", "typical": 0.015}
+        "desbaste":    { "label": "Desbaste",    "range": "0.05 – 0.20", "typical": 0.12  },
+        "semiacabado": { "label": "Semiacabado", "range": "0.02 – 0.05", "typical": 0.03  },
+        "acabado":     { "label": "Acabado",     "range": "0.01 – 0.02", "typical": 0.015 }
       }
     },
     "taladrado": {
       "id": "taladrado",
       "label": "Taladrado",
       "icon": "▼",
-      "description": "Mecanizado de agujeros por rotación de la broca",
+      "description": "Mecanizado de agujeros por rotación y avance axial de la broca. Máximo D=32 mm en taladro de columna.",
+      "machineRef": "taladro",
       "formula": {
         "S": "S = (1000 × Vc) / (π × D)",
         "F": "F = f × S",
         "t": "t = (L + 0.3 × D) / F"
       },
+      "formulaExplained": {
+        "S": "Velocidad husillo (rpm) = 1000 × Vc ÷ (π × D_broca)",
+        "F": "Avance (mm/min) = avance/revolución × rpm",
+        "t": "Tiempo (min) = (profundidad cilíndrica + 0.3×D punta cónica) ÷ avance"
+      },
       "variables": [
-        { "id": "D", "label": "Diámetro de la broca (D)", "unit": "mm",     "min": 0.5,  "max": 100,  "step": 0.1,  "default": 10  },
-        { "id": "L", "label": "Profundidad del agujero (L)", "unit": "mm",   "min": 1,    "max": 1000, "step": 0.1,  "default": 30  },
-        { "id": "f", "label": "Avance por revolución (f)",   "unit": "mm/rev","min": 0.01,"max": 1,    "step": 0.01, "default": 0.1 }
+        { "id": "D", "label": "Diámetro de la broca (D)",    "unit": "mm",     "min": 0.5,  "max": 32,   "step": 0.1,  "default": 10  },
+        { "id": "L", "label": "Profundidad del agujero (L)", "unit": "mm",     "min": 1,    "max": 150,  "step": 0.1,  "default": 30  },
+        { "id": "f", "label": "Avance por revolución (f)",   "unit": "mm/rev", "min": 0.01, "max": 0.5,  "step": 0.01, "default": 0.1 }
       ],
       "feedSuggestions": {
-        "D_menor_5":    { "label": "D < 5 mm",      "range": "0.05 – 0.10", "typical": 0.07  },
-        "D_5_15":       { "label": "5 ≤ D < 15 mm", "range": "0.10 – 0.20", "typical": 0.15  },
-        "D_15_30":      { "label": "15 ≤ D < 30 mm","range": "0.20 – 0.35", "typical": 0.25  },
-        "D_mayor_30":   { "label": "D ≥ 30 mm",     "range": "0.30 – 0.50", "typical": 0.40  }
+        "D_menor_5":  { "label": "D < 5 mm",       "range": "0.05 – 0.10", "typical": 0.07  },
+        "D_5_15":     { "label": "5 ≤ D < 15 mm",  "range": "0.10 – 0.20", "typical": 0.15  },
+        "D_15_30":    { "label": "15 ≤ D < 30 mm", "range": "0.20 – 0.35", "typical": 0.25  },
+        "D_mayor_30": { "label": "D ≥ 30 mm",       "range": "0.30 – 0.50", "typical": 0.40  }
       }
     }
   },
 
   "passTypes": {
-    "desbaste":    { "id": "desbaste",    "label": "Desbaste",    "color": "#e74c3c" },
-    "semiacabado": { "id": "semiacabado", "label": "Semiacabado", "color": "#f39c12" },
-    "acabado":     { "id": "acabado",     "label": "Acabado",     "color": "#2ecc71" }
+    "desbaste":    { "id": "desbaste",    "label": "Desbaste",    "emoji": "🔨", "color": "#ff5252", "description": "Remoción rápida de material. Superficie rugosa. Tolerancias amplias. Profundidad de corte grande." },
+    "semiacabado": { "id": "semiacabado", "label": "Semiacabado", "emoji": "⚖️", "color": "#f39c12", "description": "Balance entre velocidad y calidad. Deja 0.2–0.5 mm para el acabado final." },
+    "acabado":     { "id": "acabado",     "label": "Acabado",     "emoji": "✨", "color": "#3ddc84", "description": "Alta calidad superficial. Tolerancias estrechas. Profundidad de corte pequeña. Corte final." }
   },
 
   "unitConversions": {
-    "note": "S en rev/min (rpm), F en mm/min, t en min",
-    "Pi": 3.14159265358979
-  }
+    "note": "S en rev/min (rpm), F en mm/min, t en min, Vc en m/min, D y L en mm",
+    "Pi": 3.141592653589793,
+    "pulgadaAMm": 25.4,
+    "pulgadaAPulgada": 1
+  },
+
+  "resultInterpretations": {
+    "S": {
+      "label": "¿Qué hago con S (rpm)?",
+      "description": "S es la velocidad a la que debe girar el husillo de tu máquina.",
+      "practical": "Torno: ajusta la palanca de velocidades al valor más cercano disponible (40–3000 rpm). Fresadora: 60–6000 rpm. Taladro de columna: 200–3000 rpm. CNC: es el código S del programa (Ej: S637 M3).",
+      "warning": "Si S calculado supera el máximo de tu máquina (3000 rpm torno/taladro, 6000 fresadora), usa el valor máximo disponible y reduce Vc proporcionalmente. Si S es menor al mínimo (40 rpm torno), selecciona HSS con ese material."
+    },
+    "F": {
+      "label": "¿Qué hago con F (mm/min)?",
+      "description": "F es la velocidad de avance de la herramienta — qué tan rápido se desplaza sobre la pieza.",
+      "practical": "Torno manual: ajusta la palanca de avances (rango 0.04–2 mm/rev × S). CNC: es el código F del programa (Ej: F127). Fresadora: controla el avance de la mesa.",
+      "warning": "F muy alto → vibración, mal acabado o rotura. F muy bajo → calor por fricción (crítico en acero inoxidable). En inox NUNCA detengas la herramienta sin avance sobre la pieza."
+    },
+    "t": {
+      "label": "¿Qué hago con t (min)?",
+      "description": "t es el tiempo teórico del corte activo, sin incluir preparación, montaje ni mediciones.",
+      "practical": "Si t = 0.79 min → el corte dura aprox. 47 segundos. El tiempo real de la operación completa (setup + mecanizado + medición) puede ser 3–5× mayor.",
+      "warning": "Tiempo estimado teórico. Puede variar ±15% por desgaste de herramienta y variaciones del material."
+    }
+  },
+
+  "guides": {
+    "beforeStart": {
+      "title": "Antes de Empezar",
+      "checklist": [
+        { "icon": "📏", "text": "Ten a la mano un calibrador vernier (pie de rey) para medir diámetros." },
+        { "icon": "📐", "text": "Usa una regla metálica para medir la longitud de corte." },
+        { "icon": "🔩", "text": "Identifica el material de la pieza: busca el grabado en la barra, el plano técnico, o pregunta al instructor." },
+        { "icon": "🔧", "text": "Identifica el material de la herramienta: mira la inscripción en el mango (HSS, HM, Carbide...)." },
+        { "icon": "📋", "text": "Define el tipo de pasada: ¿quitas mucho material (desbaste) o terminas la pieza (acabado)?" },
+        { "icon": "📌", "text": "Todas las medidas deben estar en milímetros (mm). 1 pulgada = 25.4 mm." }
+      ]
+    },
+    "measurementTools": [
+      {
+        "id": "vernier",
+        "name": "Calibrador Vernier (Pie de Rey)",
+        "icon": "📏",
+        "use": "Medir diámetros exteriores, interiores y longitudes cortas",
+        "precision": "0.02 mm",
+        "howToRead": "Suma la escala principal (mm enteros) más la escala vernier (fracción de mm). La línea que coincida indica los décimos.",
+        "tip": "Cierra las mordazas suavemente — no aprietes demasiado o la lectura será mayor a la real."
+      },
+      {
+        "id": "micrometro",
+        "name": "Micrómetro de Exteriores",
+        "icon": "🔬",
+        "use": "Medir diámetros con alta precisión (±0.001 mm)",
+        "precision": "0.001 mm",
+        "howToRead": "Cada vuelta del tambor = 0.5 mm. Suma las divisiones del cilindro fijo más el tambor.",
+        "tip": "Usa el trinquete (extremo del tambor) para aplicar siempre la misma fuerza de apriete."
+      },
+      {
+        "id": "regla",
+        "name": "Regla Metálica",
+        "icon": "📐",
+        "use": "Medir longitudes de corte",
+        "precision": "0.5 mm",
+        "howToRead": "Apoya el cero exactamente al inicio del corte. Lee donde termina la zona a mecanizar.",
+        "tip": "No uses el borde físico de la regla como cero — empieza desde la primera línea marcada."
+      }
+    ],
+    "operations": {
+      "torneado": {
+        "intro": "La PIEZA gira y la herramienta avanza en línea recta. Como pelar una zanahoria: la zanahoria gira y el pelador avanza a lo largo.",
+        "analogy": "Como pelar una papa cilíndrica: la papa gira, el cuchillo avanza.",
+        "variables": {
+          "D": {
+            "name": "Diámetro de la pieza",
+            "symbol": "D",
+            "unit": "mm",
+            "plainDescription": "El grosor de la barra cilíndrica — de lado a lado pasando exactamente por el centro. Es la medida más importante del torneado.",
+            "whereToMeasure": "En la zona que vas a mecanizar, NO en los extremos biselados.",
+            "steps": [
+              "Apaga la máquina y espera que pare completamente.",
+              "Toma el calibrador vernier y ábrelo más que el diámetro de la pieza.",
+              "Cierra las mordazas exteriores (las grandes) perpendicularmente sobre la pieza.",
+              "Lee el valor en mm — ese es tu D.",
+              "Repite en 2–3 puntos para verificar que sea uniforme."
+            ],
+            "tool": "Calibrador vernier (mordazas exteriores)",
+            "tips": [
+              "Si el plano tiene el valor de D, úsalo directamente.",
+              "Mide en la zona sin mecanizar (diámetro original de la barra)."
+            ],
+            "mistakes": [
+              "No midas en extremos biselados o chanfleados.",
+              "No confundas radio R con diámetro D = 2×R."
+            ]
+          },
+          "L": {
+            "name": "Longitud de corte",
+            "symbol": "L",
+            "unit": "mm",
+            "plainDescription": "Distancia desde donde empieza el corte hasta donde termina — a lo largo del eje de la pieza.",
+            "whereToMeasure": "Desde el primer contacto de la herramienta hasta el punto final del corte.",
+            "steps": [
+              "Marca con lápiz de metal el inicio y fin del corte.",
+              "Apoya la regla metálica paralela al eje de la pieza.",
+              "Mide entre las dos marcas.",
+              "Ese valor es tu L."
+            ],
+            "tool": "Regla metálica (o calibrador vernier para longitudes cortas)",
+            "tips": [
+              "Si maquinas toda la barra: L = longitud total.",
+              "Agrega 2–3 mm de margen de entrada y salida."
+            ],
+            "mistakes": [
+              "No midas la barra completa si solo torneas una parte.",
+              "No olvides el sobremetal si hay pasadas posteriores."
+            ]
+          },
+          "f": {
+            "name": "Avance por revolución",
+            "symbol": "f",
+            "unit": "mm/rev",
+            "plainDescription": "Cuánto avanza la herramienta por cada vuelta completa de la pieza. No se mide — se elige según la pasada.",
+            "whereToMeasure": "No se mide físicamente. Se elige según el tipo de pasada.",
+            "steps": [
+              "Elige el tipo de pasada (desbaste / semiacabado / acabado).",
+              "La calculadora autocompleta el valor típico.",
+              "Desbaste: f = 0.25–0.50 mm/rev.",
+              "Acabado: f = 0.05–0.10 mm/rev."
+            ],
+            "tool": "No requiere instrumento.",
+            "tips": [
+              "Mayor f → más rápido pero superficie más rugosa.",
+              "En acero inoxidable: f constante — nunca detengas la herramienta sobre la pieza."
+            ],
+            "mistakes": [
+              "No uses el mismo f para desbaste y acabado.",
+              "No pongas f = 0 — la herramienta fricciona sin cortar."
+            ]
+          }
+        }
+      },
+      "fresado": {
+        "intro": "La HERRAMIENTA (fresa) gira mientras la pieza avanza. La fresa tiene varios dientes que cortan el material.",
+        "analogy": "Como un ventilador giratorio que va comiendo el material a medida que la pieza pasa por debajo.",
+        "variables": {
+          "D": {
+            "name": "Diámetro de la fresa",
+            "symbol": "D",
+            "unit": "mm",
+            "plainDescription": "El ancho del círculo que describen los dientes al girar. Es el diámetro de la HERRAMIENTA, no de la pieza.",
+            "whereToMeasure": "De punta de diente a punta de diente opuestos.",
+            "steps": [
+              "Retira la fresa o mídela antes de montarla.",
+              "Mide de punta a punta con el calibrador.",
+              "O lee el número grabado en el mango (Ej: ⌀20 = D=20 mm)."
+            ],
+            "tool": "Calibrador vernier o grabado en el mango",
+            "tips": [
+              "Fresas estándar: 6, 8, 10, 12, 16, 20, 25, 32 mm.",
+              "El fabricante siempre graba el diámetro nominal en el mango."
+            ],
+            "mistakes": [
+              "No midas el mango de sujeción — no es el diámetro de corte.",
+              "No confundas radio con diámetro."
+            ]
+          },
+          "L": {
+            "name": "Longitud de corte",
+            "symbol": "L",
+            "unit": "mm",
+            "plainDescription": "Distancia total que la fresa recorre sobre la pieza en dirección de avance.",
+            "whereToMeasure": "Largo de la ranura, cajera o superficie a fresar.",
+            "steps": [
+              "Identifica entrada y salida de la fresa sobre la pieza.",
+              "Mide con regla esa distancia.",
+              "Si la fresa entra desde fuera: suma el radio de la fresa."
+            ],
+            "tool": "Regla metálica",
+            "tips": ["Para cajeras cerradas: L = largo de la cajera."],
+            "mistakes": ["No olvides sumar entrada y salida en cortes abiertos."]
+          },
+          "Z": {
+            "name": "Número de dientes",
+            "symbol": "Z",
+            "unit": "dientes",
+            "plainDescription": "Cantidad de filos cortantes de la fresa. Se cuenta visualmente mirando la punta.",
+            "whereToMeasure": "Cuenta los filos mirando la punta de la fresa de frente.",
+            "steps": [
+              "Mira la fresa desde su punta.",
+              "Cuenta los filos afilados visibles.",
+              "2, 3 o 4 dientes son los más comunes.",
+              "También puede estar grabado: '4F' = 4 filos (Flutes)."
+            ],
+            "tool": "Observación visual directa",
+            "tips": [
+              "2 dientes: aluminio y plásticos.",
+              "4 dientes: aceros y materiales duros."
+            ],
+            "mistakes": ["No confundas los canales de alivio con los dientes cortantes."]
+          },
+          "fz": {
+            "name": "Avance por diente",
+            "symbol": "fz",
+            "unit": "mm/diente",
+            "plainDescription": "Cuánto avanza la pieza por cada diente que corta. El 'bocado' de cada diente. No se mide — se elige.",
+            "whereToMeasure": "No se mide. Se selecciona según material y tipo de pasada.",
+            "steps": [
+              "Elige el tipo de pasada.",
+              "La calculadora autocompleta el valor.",
+              "Desbaste: fz = 0.05–0.20 mm/diente.",
+              "Acabado: fz = 0.01–0.02 mm/diente."
+            ],
+            "tool": "No requiere instrumento.",
+            "tips": [
+              "F total = fz × Z × S.",
+              "Con más dientes puedes usar fz menor y avanzar igual de rápido."
+            ],
+            "mistakes": ["No pongas fz = 0.", "No uses el mismo fz para fresas de 2 y 4 dientes."]
+          }
+        }
+      },
+      "taladrado": {
+        "intro": "La BROCA gira y baja hacia la pieza haciendo un agujero cilíndrico. El taladro de columna del taller soporta brocas hasta 32 mm y tiene un recorrido máximo de 150 mm.",
+        "analogy": "Exactamente como un taladro de casa pero con control preciso de velocidad y profundidad.",
+        "variables": {
+          "D": {
+            "name": "Diámetro de la broca",
+            "symbol": "D",
+            "unit": "mm",
+            "plainDescription": "El ancho de la broca — igual al tamaño del agujero. Máximo en taladro de columna: 32 mm.",
+            "whereToMeasure": "En el cuerpo de la broca (alas cortantes) o leer el número del mango.",
+            "steps": [
+              "Retira la broca o mídela antes de montarla.",
+              "Mide el cuerpo con el calibrador vernier.",
+              "O lee el número grabado en el mango — ese es el diámetro nominal.",
+              "Verifica que D ≤ 32 mm (límite del taladro de columna)."
+            ],
+            "tool": "Calibrador vernier o grabado en el mango",
+            "tips": [
+              "Brocas estándar: 1, 2, 3, 4, 5, 6, 8, 10, 12, 14, 16, 19, 22, 25, 32 mm.",
+              "Para D > 32 mm, usa el torno o fresadora con broca especial."
+            ],
+            "mistakes": [
+              "No midas el mango de sujeción.",
+              "No uses brocas mayores a 32 mm en el taladro de columna."
+            ]
+          },
+          "L": {
+            "name": "Profundidad del agujero",
+            "symbol": "L",
+            "unit": "mm",
+            "plainDescription": "Qué tan hondo queda el agujero — solo la parte cilíndrica. La calculadora suma 0.3×D de la punta automáticamente.",
+            "whereToMeasure": "Espesor de la pieza (agujero pasante) o profundidad del plano (agujero ciego).",
+            "steps": [
+              "Agujero pasante: mide el espesor total de la pieza.",
+              "Agujero ciego: usa la profundidad del plano.",
+              "Verifica que L ≤ 150 mm (recorrido máximo del husillo).",
+              "La calculadora suma 0.3×D automáticamente."
+            ],
+            "tool": "Calibrador vernier (mordaza de profundidad) o regla metálica",
+            "tips": [
+              "Recorrido máximo del husillo del taladro de columna: 150 mm.",
+              "Para agujeros pasantes: L = espesor de la pieza."
+            ],
+            "mistakes": [
+              "No incluyas la punta cónica en tu L — la calculadora ya lo hace.",
+              "Para agujeros ciegos: no perfores de más o dañas la mesa."
+            ]
+          },
+          "f": {
+            "name": "Avance por revolución",
+            "symbol": "f",
+            "unit": "mm/rev",
+            "plainDescription": "Cuánto baja la broca por cada vuelta. Depende del diámetro: brocas pequeñas necesitan avances menores.",
+            "whereToMeasure": "No se mide. Se elige según el diámetro D de la broca.",
+            "steps": [
+              "Mira el diámetro D de tu broca.",
+              "D < 5 mm → f = 0.05–0.10 mm/rev.",
+              "5 ≤ D < 15 mm → f = 0.10–0.20 mm/rev.",
+              "15 ≤ D < 30 mm → f = 0.20–0.35 mm/rev.",
+              "D ≥ 30 mm → f = 0.30–0.50 mm/rev."
+            ],
+            "tool": "No requiere instrumento.",
+            "tips": [
+              "Brocas pequeñas son frágiles — usa siempre f bajo.",
+              "En acero inoxidable: avance constante obligatorio."
+            ],
+            "mistakes": [
+              "No uses el mismo f para brocas de 3 y 20 mm.",
+              "No taladres en seco materiales duros."
+            ]
+          }
+        }
+      }
+    }
+  },
+
+  "glossary": [
+    { "term": "Vc — Velocidad de Corte",              "definition": "Velocidad en m/min a la que el material pasa por el filo. Dato de la tabla PDF. Punto de partida de todos los cálculos." },
+    { "term": "S — Velocidad de Husillo",             "definition": "Revoluciones por minuto (rpm) del eje. S = 1000×Vc ÷ (π×D). Se programa en la máquina." },
+    { "term": "F — Velocidad de Avance",              "definition": "Velocidad en mm/min con que la herramienta se desplaza. Torneado: F=f×S. Fresado: F=fz×Z×S." },
+    { "term": "t — Tiempo de Mecanizado",             "definition": "Duración teórica del corte en minutos. t=L/F (torneado/fresado). t=(L+0.3×D)/F (taladrado)." },
+    { "term": "D — Diámetro",                         "definition": "Diámetro en mm de la pieza (torneado) o la herramienta (fresado/taladrado). Medida transversal al eje." },
+    { "term": "L — Longitud de Corte",                "definition": "Distancia en mm que recorre la herramienta en el corte. En taladrado: profundidad cilíndrica del agujero." },
+    { "term": "f — Avance por Revolución",            "definition": "Distancia mm que avanza la herramienta por vuelta. Torneado y taladrado. Unidades: mm/rev." },
+    { "term": "fz — Avance por Diente",               "definition": "Distancia mm que avanza la pieza por cada diente de la fresa. Solo en fresado. Unidades: mm/diente." },
+    { "term": "Z — Número de Dientes",                "definition": "Filos cortantes de la fresa. Se cuenta visualmente. Común: 2, 3, 4 dientes." },
+    { "term": "HB — Dureza Brinell",                  "definition": "Escala de dureza. Mayor HB = más duro = menores velocidades de corte." },
+    { "term": "HSS — Acero Rápido",                   "definition": "High Speed Steel. Herramienta económica, bajas velocidades. Marcada 'HSS' o 'M2'." },
+    { "term": "Carburo Cementado (WC-Co)",             "definition": "Metal duro. Velocidades 3–5× mayores que HSS. Marcado 'HM', 'Carbide'. Muy resistente al calor." },
+    { "term": "Cerámica (Al₂O₃ / Si₃N₄)",             "definition": "Herramienta de alta velocidad para materiales duros. Frágil. Inserto blanco/crema. Solo torneado." },
+    { "term": "CBN (Nitruro de Boro Cúbico)",          "definition": "Herramienta más dura después del diamante. Para materiales muy duros. Inserto oscuro/dorado." },
+    { "term": "Desbaste",                             "definition": "Pasada con avances grandes. Objetivo: quitar mucho material rápido. Superficie rugosa." },
+    { "term": "Semiacabado",                          "definition": "Pasada intermedia. Deja 0.2–0.5 mm para el acabado final." },
+    { "term": "Acabado",                              "definition": "Última pasada. Superficie lisa y dimensiones exactas del plano." },
+    { "term": "Viruta",                               "definition": "Material removido en el corte. Continua = material dúctil. Granular = material frágil (hierro fundido, latón)." },
+    { "term": "Endurecimiento por deformación",        "definition": "El material se endurece al deformarse sin corte. Crítico en acero inox 304/316. Se evita con avance constante." },
+    { "term": "Maquinabilidad (%)",                   "definition": "Facilidad relativa para mecanizar. Latón C360 = 100% (referencia). Mayor % = más fácil y económico." },
+    { "term": "Rompevirutas",                         "definition": "Geometría en la herramienta que fragmenta la viruta larga. Importante en acero 1045 y materiales dúctiles." },
+    { "term": "Refrigerante / Taladrina",             "definition": "Líquido de corte para reducir temperatura. Obligatorio en acero inox y titanio. Nunca en plásticos (usar solo aire)." },
+    { "term": "π (Pi)",                               "definition": "Constante ≈ 3.14159. Relaciona diámetro con circunferencia. Aparece en S = 1000×Vc÷(π×D)." }
+  ]
 }

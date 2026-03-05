@@ -1,198 +1,1236 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calculadora de Mecanizado | PUJ</title>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap"
-    rel="stylesheet"
-  />
-
-  <!-- Estilos externos -->
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
 
-  <!-- ══════════════════════════════════════
-       PANTALLA DE CARGA
-  ══════════════════════════════════════ -->
-  <div id="loadingScreen">
-    <div class="loader-ring"></div>
-    <div class="loader-text">Cargando datos de mecanizado...</div>
+<!-- PANTALLA DE CARGA -->
+<div id="loadingScreen">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Cargando calculadora...</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MODAL HELP -->
+<div class="help-overlay" id="helpOverlay" onclick="closeHelpModal()"></div>
+<div class="help-modal" id="helpModal">
+  <button class="help-modal-close" onclick="closeHelpModal()">✕</button>
+  <div id="helpModalContent"></div>
+</div>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header>
+  <div class="header-brand" onclick="setMode('home')" style="cursor:pointer;">
+    <div class="brand-icon">📐</div>
+    <div class="brand-text">
+      <h1>Calculadora de Mecanizado</h1>
+      <p>PUJ · Manufactura Moderna</p>
+    </div>
   </div>
+  <div class="header-center">
+    <!-- SELECTOR DE MODO -->
+    <div class="mode-toggle" id="modeToggle">
+      <button class="mode-btn active" id="modeQuickBtn" onclick="setMode('quick')">
+        <span class="mode-icon">⚡</span>
+        <span class="mode-label">Modo Rápido</span>
+        <span class="mode-sub">Para expertos</span>
+      </button>
+      <button class="mode-btn" id="modeGuideBtn" onclick="setMode('guided')">
+        <span class="mode-icon">🧭</span>
+        <span class="mode-label">Modo Guiado</span>
+        <span class="mode-sub">Paso a paso</span>
+      </button>
+    </div>
+  </div>
+  <div class="header-meta">
+    <span><span class="status-dot"></span>ACTIVO</span>
+    <span id="currentTime">--:--:--</span>
+  </div>
+  <button class="concepts-btn" onclick="setMode('concepts')" title="Información y conceptos">
+    <span class="concepts-icon">💡</span>
+    <span class="concepts-label">Conceptos Basicos</span>
+  </button>
+</header>
 
-  <!-- ══════════════════════════════════════
-       NOTIFICACIÓN TOAST
-  ══════════════════════════════════════ -->
-  <div class="toast" id="toast"></div>
+<!-- ═══════════════════════════════════════
+     HOME / INICIO
+═══════════════════════════════════════ -->
+<div id="panelHome" style="display:none">
+<main class="home-main">
+  <section class="home-hero">
+    <div class="hero-logo">📐</div>
+    <h1 class="hero-title">Calculadora de Mecanizado</h1>
+    <p class="hero-subtitle">Manufactura Moderna · Precisión Industrial</p>
+    <p class="hero-institution">Pontificia Universidad Javeriana</p>
+  </section>
 
-  <!-- ══════════════════════════════════════
-       ENCABEZADO
-  ══════════════════════════════════════ -->
-  <header>
-    <div class="header-brand">
-      <div class="brand-icon">⚙</div>
-      <div class="brand-text">
-        <h1>Calculadora de Mecanizado</h1>
-        <p>Desp. de Material · PUJ · Ing. Industrial</p>
+  <section class="home-content">
+    <div class="home-grid">
+      <!-- CARD: QUÉ ES -->
+      <div class="home-card">
+        <div class="card-icon">🎯</div>
+        <h2 class="card-title">¿Qué es esta herramienta?</h2>
+        <p class="card-text">
+          Una calculadora profesional para <strong>mecanizado en máquinas herramienta</strong> (torno, fresadora, taladro). 
+          Calcula automáticamente los parámetros de corte esenciales: <strong>velocidad de husillo (S), avance (F) y tiempo de proceso (t)</strong> basándose en 
+          propiedades reales de 19 materiales diferentes y 4 tipos de herramientas.
+        </p>
+      </div>
+
+      <!-- CARD: CÓMO FUNCIONA -->
+      <div class="home-card">
+        <div class="card-icon">⚙️</div>
+        <h2 class="card-title">¿Cómo funciona?</h2>
+        <p class="card-text">
+          <strong>1. Selecciona operación:</strong> Torneado, Fresado o Taladrado<br>
+          <strong>2. Elige material:</strong> De 19 opciones en tu inventario<br>
+          <strong>3. Selecciona herramienta:</strong> HSS, Carburo, Cerámica o CBN<br>
+          <strong>4. Introduce parámetros:</strong> Diámetro, longitud, avance<br>
+          <strong>5. Obtén resultados:</strong> Revoluciones, velocidad, tiempo instantáneamente
+        </p>
+      </div>
+
+      <!-- CARD: MODOS -->
+      <div class="home-card">
+        <div class="card-icon">⚡</div>
+        <h2 class="card-title">Modo Rápido</h2>
+        <p class="card-text">
+          Para operarios y técnicos con experiencia. Interfaz compacta, cálculos inmediatos. 
+          Ingresa valores, presiona calcular, obtén resultados al instante sin explicaciones.
+        </p>
+        <button class="home-mode-btn" onclick="setMode('quick')">Ir a Modo Rápido →</button>
+      </div>
+
+      <!-- CARD: WIZARD -->
+      <div class="home-card">
+        <div class="card-icon">🧭</div>
+        <h2 class="card-title">Modo Guiado (Wizard)</h2>
+        <p class="card-text">
+          Para estudiantes y aprendices. Explicaciones paso a paso, ilustraciones de máquinas, 
+          tips de seguridad y recomendaciones técnicas. Aprende mientras calculas.
+        </p>
+        <button class="home-mode-btn" onclick="setMode('guided')">Ir a Modo Guiado →</button>
+      </div>
+
+      <!-- CARD: CONCEPTOS -->
+      <div class="home-card">
+        <div class="card-icon">💡</div>
+        <h2 class="card-title">Base de Conocimiento</h2>
+        <p class="card-text">
+          Explora todo sobre mecanizado: operaciones, máquinas, propiedades de 19 materiales, 
+          tipos de herramientas, parámetros de corte, consideraciones técnicas y mejores prácticas.
+        </p>
+        <button class="home-mode-btn" onclick="setMode('concepts')">Ir a Conceptos →</button>
+      </div>
+
+      <!-- CARD: DATOS -->
+      <div class="home-card">
+        <div class="card-icon">📊</div>
+        <h2 class="card-title">Datos Técnicos Reales</h2>
+        <p class="card-text">
+          Todos los valores de velocidad de corte (Vc) provienen de especificaciones técnicas 
+          PDF de la PUJ. 19 materiales × 4 herramientas = 76 combinaciones con datos validados.
+        </p>
       </div>
     </div>
-    <div class="header-meta">
-      <span><span class="status-dot"></span>SISTEMA ACTIVO</span>
-      <span id="currentTime">--:--:--</span>
-      <span>PRIMER PARCIAL 2026</span>
-    </div>
-  </header>
 
-  <!-- ══════════════════════════════════════
-       CONTENIDO PRINCIPAL
-  ══════════════════════════════════════ -->
-  <main>
-
-    <!-- ─── PASO 1: Selección de operación ─── -->
-    <section>
-      <div class="section-title">01 — Seleccionar Operación</div>
-      <div class="op-grid" id="opGrid">
-        <!-- Renderizado por script.js -->
+    <!-- CARACTERÍSTICAS PRINCIPALES -->
+    <section class="home-features">
+      <h2 class="section-header">Características Principales</h2>
+      <div class="features-list">
+        <div class="feature-item">
+          <span class="feature-check">✓</span>
+          <div class="feature-content">
+            <strong>19 Materiales</strong> — Desde aluminio 6061 hasta titanio Ti-6Al-4V, incluyendo aceros, hierros fundidos y no metálicos
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-check">✓</span>
+          <div class="feature-content">
+            <strong>4 Tipos de Herramientas</strong> — HSS (económico), Carburo (versátil), Cerámica (rápido), CBN (ultra-rápido)
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-check">✓</span>
+          <div class="feature-content">
+            <strong>3 Operaciones</strong> — Torneado (piezas redondas), Fresado (geometrías complejas), Taladrado (agujeros precisos)
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-check">✓</span>
+          <div class="feature-content">
+            <strong>Cálculos Precisos</strong> — S (rpm), F (mm/min), t (minutos) basados en fórmulas industriales estándar
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-check">✓</span>
+          <div class="feature-content">
+            <strong>Interfaz Responsiva</strong> — Funciona perfectamente en desktop, tablet y smartphones
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-check">✓</span>
+          <div class="feature-content">
+            <strong>Modo Oscuro Profesional</strong> — Diseño ergonómico para talleres de mecanizado
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- ─── PASO 2: Parámetros ─── -->
-    <section>
-      <div class="section-title">02 — Configurar Parámetros</div>
-      <div class="config-grid">
-
-        <!-- Columna A: Material y herramienta -->
-        <div class="panel">
-          <div class="form-group">
-            <label for="selMaterial">Material de la Pieza</label>
-            <select id="selMaterial">
-              <option value="">— Seleccionar material —</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="selTool">Material de la Herramienta</label>
-            <select id="selTool">
-              <option value="">— Seleccionar herramienta —</option>
-            </select>
-          </div>
-
-          <div class="form-group" id="infoVc" style="display:none">
-            <label>Velocidad de Corte (Vc)</label>
-            <div class="input-with-unit">
-              <input type="number" id="vcDisplay" readonly />
-              <span class="unit-badge">m/min</span>
-            </div>
-          </div>
-
-          <!-- Bloque de fórmulas activas -->
-          <div class="formula-box" id="formulaBox" style="display:none">
-            <div id="formulaContent"></div>
-          </div>
+    <!-- TABLA COMPARATIVA MODOS -->
+    <section class="home-comparison">
+      <h2 class="section-header">Compara los Modos</h2>
+      <div class="comparison-table">
+        <div class="comparison-row header-row">
+          <div class="comparison-cell">Característica</div>
+          <div class="comparison-cell">Modo Rápido ⚡</div>
+          <div class="comparison-cell">Modo Guiado 🧭</div>
+          <div class="comparison-cell">Conceptos 💡</div>
         </div>
-
-        <!-- Columna B: Variables de proceso -->
-        <div class="panel">
-          <div id="varsContainer">
-            <div class="vars-placeholder">
-              ← Selecciona una operación para ver las variables
-            </div>
-          </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Para quién</strong></div>
+          <div class="comparison-cell">Expertos / Técnicos</div>
+          <div class="comparison-cell">Estudiantes / Aprendices</div>
+          <div class="comparison-cell">Todos (referencia)</div>
         </div>
-
-      </div><!-- /.config-grid -->
-
-      <!-- Tipo de pasada + sugerencia de avance -->
-      <div class="panel panel-full" id="passPanel" style="display:none">
-        <div class="form-group">
-          <label>Tipo de Pasada</label>
-          <div class="pass-buttons" id="passButtons"></div>
-          <div class="feed-hint" id="feedHint">
-            Selecciona un tipo de pasada para ver el avance recomendado.
-          </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Velocidad</strong></div>
+          <div class="comparison-cell">⚡⚡⚡ Muy rápido</div>
+          <div class="comparison-cell">⚡ Normal</div>
+          <div class="comparison-cell">— Lectura</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Explicaciones</strong></div>
+          <div class="comparison-cell">Ninguna</div>
+          <div class="comparison-cell">Completas + Diagramas</div>
+          <div class="comparison-cell">Muy detalladas</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell"><strong>Curva aprendizaje</strong></div>
+          <div class="comparison-cell">—</div>
+          <div class="comparison-cell">✓ Aprende mientras usas</div>
+          <div class="comparison-cell">✓ Aprende conceptos</div>
         </div>
       </div>
+    </section>
 
-      <!-- Botón calcular -->
-      <div class="panel panel-full btn-panel">
-        <button class="calc-btn" id="calcBtn" onclick="calculateResults()">
-          <span class="btn-icon">▶</span> Calcular Parámetros de Corte
+    <!-- CTA FINAL -->
+    <section class="home-cta">
+      <h2>Comienza ahora</h2>
+      <p>Elige el modo que mejor se ajuste a tu experiencia y necesidades</p>
+      <div class="cta-buttons">
+        <button class="cta-btn cta-btn-quick" onclick="setMode('quick')">
+          <span class="btn-icon">⚡</span> Modo Rápido
+        </button>
+        <button class="cta-btn cta-btn-guide" onclick="setMode('guided')">
+          <span class="btn-icon">🧭</span> Modo Guiado
+        </button>
+        <button class="cta-btn cta-btn-concepts" onclick="setMode('concepts')">
+          <span class="btn-icon">💡</span> Conceptos
         </button>
       </div>
     </section>
+  </section>
+</main>
+</div><!-- /#panelHome -->
 
-    <!-- ─── PASO 3: Resultados ─── -->
-    <section>
-      <div class="section-title">03 — Resultados</div>
-      <div class="results-wrapper" id="resultsWrapper">
+<!-- ═══════════════════════════════════════
+     MODO RÁPIDO
+═══════════════════════════════════════ -->
+<div id="panelQuick">
+<main>
 
-        <!-- Advertencia de combinación inválida -->
-        <div class="warning-box" id="warningBox"></div>
+  <!-- Progreso -->
+  <div class="progress-bar-wrap">
+    <div class="progress-step" id="prog1"><div class="prog-dot">1</div><span>Operación</span></div>
+    <div class="progress-line"></div>
+    <div class="progress-step" id="prog2"><div class="prog-dot">2</div><span>Parámetros</span></div>
+    <div class="progress-line"></div>
+    <div class="progress-step" id="prog3"><div class="prog-dot">3</div><span>Resultados</span></div>
+  </div>
 
-        <div class="panel panel-full">
+  <!-- Paso 1 -->
+  <section>
+    <div class="section-title">01 — Seleccionar Operación</div>
+    <div class="op-grid" id="opGrid"></div>
+  </section>
 
-          <!-- Encabezado del resultado -->
-          <div class="results-header">
-            <div class="result-op-label" id="resOpLabel">—</div>
-            <div class="result-timestamp" id="resTimestamp">—</div>
+  <!-- Paso 2 -->
+  <section>
+    <div class="section-title">02 — Configurar Parámetros</div>
+    <div class="config-grid">
+      <div class="panel">
+        <div id="noOpNotice" class="no-op-notice">← Selecciona primero una operación</div>
+        <div id="matToolWrap" style="display:none">
+          <div class="form-group">
+            <label for="selMaterial">Material de la Pieza <button class="help-icon-btn" onclick="openMaterialHelp()">?</button></label>
+            <select id="selMaterial"><option value="">— Seleccionar —</option></select>
           </div>
-
-          <!-- Tarjetas de resultados: S, F, t -->
-          <div class="results-grid">
-            <div class="result-card card-S">
-              <div class="result-label">Velocidad de Husillo</div>
-              <div class="result-value" id="valS">—</div>
-              <div class="result-unit">rev/min (rpm)</div>
-              <div class="result-name">S — Spindle Speed</div>
-            </div>
-            <div class="result-card card-F">
-              <div class="result-label">Velocidad de Avance</div>
-              <div class="result-value" id="valF">—</div>
-              <div class="result-unit">mm/min</div>
-              <div class="result-name">F — Feed Rate</div>
-            </div>
-            <div class="result-card card-t">
-              <div class="result-label">Tiempo de Mecanizado</div>
-              <div class="result-value" id="valT">—</div>
-              <div class="result-unit">min</div>
-              <div class="result-name">t — Machining Time</div>
+          <div class="form-group">
+            <label for="selTool">Material de la Herramienta <button class="help-icon-btn" onclick="openToolHelp()">?</button></label>
+            <select id="selTool"><option value="">— Seleccionar —</option></select>
+          </div>
+          <div class="form-group" id="infoVc" style="display:none">
+            <label>Velocidad de Corte Vc (tabla)</label>
+            <div class="input-with-unit">
+              <input type="number" id="vcDisplay" readonly/>
+              <span class="unit-badge">m/min</span>
             </div>
           </div>
-
-          <!-- Desglose de pasos del cálculo -->
-          <div class="calc-steps" id="calcSteps"></div>
-
-          <!-- Tabla de resumen de entradas -->
-          <div class="input-summary">
-            <div class="input-summary-title">Parámetros de Entrada</div>
-            <div id="inputSummary"></div>
+          <div class="formula-box" id="formulaBox" style="display:none">
+            <div class="formula-box-title">Fórmulas activas</div>
+            <div id="formulaContent"></div>
           </div>
-
         </div>
-      </div><!-- /.results-wrapper -->
+      </div>
+      <div class="panel">
+        <div id="varsContainer">
+          <div class="vars-placeholder">← Selecciona una operación</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-full" id="passPanel" style="display:none">
+      <label>Tipo de Pasada <button class="help-icon-btn" onclick="openPassHelp()">?</button></label>
+      <div class="pass-buttons" id="passButtons"></div>
+      <div class="feed-hint" id="feedHint">Selecciona un tipo de pasada para ver el avance recomendado.</div>
+    </div>
+
+    <div class="panel panel-full btn-panel">
+      <button class="calc-btn" onclick="calculateResults()">
+        <span class="btn-icon">▶</span> Calcular Parámetros de Corte
+      </button>
+    </div>
+  </section>
+
+  <!-- Paso 3 -->
+  <section>
+    <div class="section-title">03 — Resultados</div>
+    <div class="results-wrapper" id="resultsWrapper">
+      <div class="warning-box" id="warningBox"></div>
+      <div class="panel panel-full">
+        <div class="results-header">
+          <div class="result-op-label" id="resOpLabel">—</div>
+          <div class="result-timestamp" id="resTimestamp">—</div>
+        </div>
+        <div class="results-grid">
+          <div class="result-card card-S" onclick="openResultHelp('S')">
+            <div class="result-info-badge">ℹ</div>
+            <div class="result-label">Velocidad de Husillo</div>
+            <div class="result-value" id="valS">—</div>
+            <div class="result-unit">rev/min (rpm)</div>
+            <div class="result-name">S — Spindle Speed</div>
+          </div>
+          <div class="result-card card-F" onclick="openResultHelp('F')">
+            <div class="result-info-badge">ℹ</div>
+            <div class="result-label">Velocidad de Avance</div>
+            <div class="result-value" id="valF">—</div>
+            <div class="result-unit">mm/min</div>
+            <div class="result-name">F — Feed Rate</div>
+          </div>
+          <div class="result-card card-t" onclick="openResultHelp('t')">
+            <div class="result-info-badge">ℹ</div>
+            <div class="result-label">Tiempo de Mecanizado</div>
+            <div class="result-value" id="valT">—</div>
+            <div class="result-unit">min</div>
+            <div class="result-name">t — Machining Time</div>
+          </div>
+        </div>
+        <div class="steps-title">Desglose del Cálculo</div>
+        <div class="calc-steps" id="calcSteps"></div>
+        <div class="input-summary">
+          <div class="input-summary-title">Parámetros Ingresados</div>
+          <div id="inputSummary"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</div><!-- /#panelQuick -->
+
+
+<!-- ═══════════════════════════════════════
+     MODO GUIADO — WIZARD COMPLETO
+═══════════════════════════════════════ -->
+<div id="panelGuided" style="display:none">
+
+  <!-- Cabecera del wizard -->
+  <div class="wizard-header">
+    <div class="wizard-progress-dots" id="wizardDots"></div>
+    <div class="wizard-step-label" id="wizardStepLabel">Paso 1</div>
+  </div>
+
+  <!-- Contenedor principal del paso -->
+  <div class="wizard-body" id="wizardBody">
+    <!-- Renderizado dinámicamente por JS -->
+  </div>
+
+  <!-- Navegación inferior -->
+  <div class="wizard-nav" id="wizardNav">
+    <button class="wiz-btn-back" id="wizBackBtn" onclick="wizardBack()">← Atrás</button>
+    <div class="wizard-nav-center" id="wizardNavInfo"></div>
+    <button class="wiz-btn-next" id="wizNextBtn" onclick="wizardNext()">Siguiente →</button>
+  </div>
+
+</div><!-- /#panelGuided -->
+
+<!-- ═══════════════════════════════════════
+     PANEL DE CONCEPTOS
+═══════════════════════════════════════ -->
+<div id="panelConcepts" style="display:none">
+<main class="concepts-main">
+
+  <section class="concepts-section concept-hero">
+    <div class="hero-content">
+      <h2 class="concepts-title">📚 Base de Conocimiento de Mecanizado</h2>
+      <p class="concepts-intro">Todo lo que necesitas saber sobre manufactura, parámetros, máquinas y materiales. Información técnica completa y práctica.</p>
+    </div>
+  </section>
+
+  <!-- NAVEGACIÓN DE TABS -->
+  <div class="concepts-tabs">
+    <button class="concept-tab-btn active" onclick="switchConceptTab('operaciones')">Operaciones</button>
+    <button class="concept-tab-btn" onclick="switchConceptTab('maquinas')">Máquinas</button>
+    <button class="concept-tab-btn" onclick="switchConceptTab('materiales')">Materiales</button>
+    <button class="concept-tab-btn" onclick="switchConceptTab('herramientas')">Herramientas</button>
+    <button class="concept-tab-btn" onclick="switchConceptTab('parametros')">Parámetros</button>
+    <button class="concept-tab-btn" onclick="switchConceptTab('consideraciones')">Consideraciones</button>
+    <button class="concept-tab-btn" onclick="switchConceptTab('consejos')">Tips & Mejores Prácticas</button>
+  </div>
+
+  <!-- TAB 1: OPERACIONES -->
+  <div id="tab-operaciones" class="concept-tab-content">
+    <section class="concepts-section">
+      <h3 class="concepts-subtitle">Operaciones de Mecanizado</h3>
+      <div class="concept-cards">
+        <div class="concept-card-lg">
+          <div class="concept-icon">◎</div>
+          <div class="concept-header">Torneado</div>
+          <div class="concept-text">Mecanizado en torno por rotación de la pieza. La herramienta avanza en línea recta, removiendo material en forma de viruta cilíndrica. Ideal para piezas de revolución: ejes, bujes, poleas.</div>
+          <div class="concept-details">
+            <div class="detail-item">✓ Precisión radial excelente</div>
+            <div class="detail-item">✓ Superficies cilíndricas y cónicas</div>
+            <div class="detail-item">✓ Rosca interna y externa</div>
+            <div class="detail-item">⚠ Requiere fijación segura de la pieza</div>
+          </div>
+        </div>
+        <div class="concept-card-lg">
+          <div class="concept-icon">✦</div>
+          <div class="concept-header">Fresado</div>
+          <div class="concept-text">La herramienta rotatoria (fresa) remueve material mientras la pieza se desplaza en X, Y, Z. Crea superficies planas, perfiles complejos, engranajes y geometrías tridimensionales. Operación versátil.</div>
+          <div class="concept-details">
+            <div class="detail-item">✓ Geometrías complejas 3D</div>
+            <div class="detail-item">✓ Chaveteros, ranuras internas</div>
+            <div class="detail-item">✓ Tolerancias muy ajustadas</div>
+            <div class="detail-item">⚠ Requiere sistemas de sujeción especiales</div>
+          </div>
+        </div>
+        <div class="concept-card-lg">
+          <div class="concept-icon">▼</div>
+          <div class="concept-header">Taladrado</div>
+          <div class="concept-text">Operación de perforación mediante rotación vertical de una broca. Crea agujeros cilíndricos precisos en la pieza. Base para roscas internas y ensambles estructurales.</div>
+          <div class="concept-details">
+            <div class="detail-item">✓ Agujeros redondos precisos</div>
+            <div class="detail-item">✓ Operación simple y rápida</div>
+            <div class="detail-item">✓ Ideal para producción en serie</div>
+            <div class="detail-item">⚠ Limitado a geometría cilíndrica</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB 2: MÁQUINAS -->
+  <div id="tab-maquinas" class="concept-tab-content" style="display:none">
+    <section class="concepts-section">
+      <h3 class="concepts-subtitle">Máquinas Herramienta</h3>
+      <div class="machines-grid">
+        <div class="machine-card expandible" onclick="toggleMachineInfo(this)">
+          <div class="machine-header">
+            <div class="machine-icon">🔄</div>
+            <div class="machine-name">Torno Convencional</div>
+            <div class="machine-badge">◎ Torneado</div>
+          </div>
+          <div class="machine-info hidden">
+            <div class="machine-detail">
+              <span class="label">RPM:</span> 40 – 3000 rpm
+            </div>
+            <div class="machine-detail">
+              <span class="label">Precisión:</span> ±0.02 mm
+            </div>
+            <div class="machine-detail">
+              <span class="label">Diámetro máx:</span> 600 mm sobre bancada
+            </div>
+            <div class="machine-detail">
+              <span class="label">Distancia centros:</span> 3000 mm
+            </div>
+            <div class="machine-detail">
+              <span class="label">Potencia:</span> 1 – 15 HP
+            </div>
+            <div class="machine-description">
+              Máquina fundamental para piezas cilíndricas. Material de estructura: hierro fundido para absorber vibraciones. Ideal para educación y producción de precisión media.
+            </div>
+          </div>
+        </div>
+
+        <div class="machine-card expandible" onclick="toggleMachineInfo(this)">
+          <div class="machine-header">
+            <div class="machine-icon">✦</div>
+            <div class="machine-name">Fresadora</div>
+            <div class="machine-badge">✦ Fresado</div>
+          </div>
+          <div class="machine-info hidden">
+            <div class="machine-detail">
+              <span class="label">RPM:</span> 60 – 6000 rpm
+            </div>
+            <div class="machine-detail">
+              <span class="label">Recorridos:</span> X: 1500mm, Y: 800mm, Z: 700mm
+            </div>
+            <div class="machine-detail">
+              <span class="label">Precisión:</span> ±0.01 – 0.05 mm
+            </div>
+            <div class="machine-detail">
+              <span class="label">Cono husillo:</span> ISO 40, R8 o Morse
+            </div>
+            <div class="machine-detail">
+              <span class="label">Potencia:</span> 2 – 20 HP
+            </div>
+            <div class="machine-description">
+              Versátil para geometrías complejas. Sistema de refrigeración integrado. Ideal para engranajes, moldes y piezas prismáticas de alta precisión.
+            </div>
+          </div>
+        </div>
+
+        <div class="machine-card expandible" onclick="toggleMachineInfo(this)">
+          <div class="machine-header">
+            <div class="machine-icon">▼</div>
+            <div class="machine-name">Taladro de Columna</div>
+            <div class="machine-badge">▼ Taladrado</div>
+          </div>
+          <div class="machine-info hidden">
+            <div class="machine-detail">
+              <span class="label">RPM:</span> 200 – 3000 rpm
+            </div>
+            <div class="machine-detail">
+              <span class="label">Broca máxima:</span> 32 mm
+            </div>
+            <div class="machine-detail">
+              <span class="label">Recorrido husillo:</span> 150 mm
+            </div>
+            <div class="machine-detail">
+              <span class="label">Mandril:</span> 1 – 16 mm (hasta 32 mm con adaptador)
+            </div>
+            <div class="machine-detail">
+              <span class="label">Mesa inclinable:</span> Hasta 45°
+            </div>
+            <div class="machine-detail">
+              <span class="label">Potencia:</span> 0.5 – 5 HP
+            </div>
+            <div class="machine-description">
+              Máquina principal para perforaciones precisas. Sistema de tope de profundidad. Ideal para producción de serie y agujeros en estructuras.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB 3: MATERIALES -->
+  <div id="tab-materiales" class="concept-tab-content" style="display:none">
+    <section class="concepts-section">
+      <h3 class="concepts-subtitle">Materiales de Trabajo — Base Completa</h3>
+      <div class="materials-grid">
+        <!-- PDF ASIGNATURA: NO FERROSOS -->
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Aluminio 6061-T6 ★</div>
+            <div class="material-badge">No Ferroso</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 2.70 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 95</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 310 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐⭐⭐⭐ 50%</div>
+            <div class="material-description">
+              ✓ Excelente maquinabilidad — viruta continua<br>
+              ✓ Requiere ángulos de desprendimiento altos (15°–20°)<br>
+              ✓ Se forma viruta continua — requiere rompevirutas<br>
+              ⚠ Refrigeración recomendada (PDF Asignatura)
+            </div>
+          </div>
+        </div>
+
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Latón C360 ★</div>
+            <div class="material-badge">No Ferroso</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 8.50 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 75</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 340 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐⭐⭐⭐ 100% (REFERENTE)</div>
+            <div class="material-description">
+              ✓ MEJOR maquinabilidad del mundo (100%)<br>
+              ✓ Viruta corta y quebradiza<br>
+              ✓ Se puede mecanizar en seco<br>
+              ✓ Ángulos neutros (0°) para evitar clavar herramienta
+            </div>
+          </div>
+        </div>
+
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Bronce SAE 660 ★</div>
+            <div class="material-badge">No Ferroso</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 8.90 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 65–75</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 240 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐⭐⭐☆ 40%</div>
+            <div class="material-description">
+              ✓ Material de fricción y sacrificio (cojinetes)<br>
+              ✓ Viruta granular (fragmentada)<br>
+              ✓ Estabilidad dimensional excelente<br>
+              ✓ Se puede mecanizar en seco
+            </div>
+          </div>
+        </div>
+
+        <!-- PDF ASIGNATURA: ACEROS -->
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Acero AISI 1045 ★</div>
+            <div class="material-badge">Acero Carbono</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 7.85 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 163</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 570 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐⭐☆☆ 65%</div>
+            <div class="material-description">
+              ⚠ IMPORTANTE: Requiere refrigeración CONSTANTE<br>
+              ⚠ Control de viruta obligatorio (rompevirutas)<br>
+              ✓ Resistencia a tensión excelente<br>
+              ✓ Ideal para transmisión de potencia (PDF Asignatura)
+            </div>
+          </div>
+        </div>
+
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Acero Inoxidable 304 ★</div>
+            <div class="material-badge">Acero Inoxidable</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 8.00 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 123–170</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 515 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐☆☆☆ 45%</div>
+            <div class="material-description">
+              ⚠ CRÍTICO: Endurecimiento por deformación<br>
+              ⚠ NUNCA detener herramienta sobre la pieza<br>
+              ⚠ Avance constante OBLIGATORIO<br>
+              ⚠ Refrigeración abundante durante todo el proceso
+            </div>
+          </div>
+        </div>
+
+        <!-- ACEROS ADICIONALES -->
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Acero Suave AISI 1018</div>
+            <div class="material-badge">Acero Bajo Carbono</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 7.85 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 120–180</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 340 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐⭐⭐☆ 78%</div>
+            <div class="material-description">
+              ✓ Fácil de mecanizar — ideal para aprendices<br>
+              ✓ Genera viruta larga — usar rompevirutas si es necesario<br>
+              ✓ Material constructivo estructural más común<br>
+              ✓ Buena relación costo/rendimiento
+            </div>
+          </div>
+        </div>
+
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Acero Carbono Medio Genérico</div>
+            <div class="material-badge">Acero Medio</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 7.85 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 180–250</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 450–620 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐⭐☆☆ 65%</div>
+            <div class="material-description">
+              ✓ Amplia familia de aceros de uso general<br>
+              ✓ Buena relación resistencia / maquinabilidad<br>
+              ✓ Requiere refrigeración en operaciones largas<br>
+              ✓ Aplicaciones estructurales y de potencia
+            </div>
+          </div>
+        </div>
+
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Acero Alto Carbono (1080–1095)</div>
+            <div class="material-badge">Acero Duro</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 7.85 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 250–320</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 800–1000 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐☆☆☆ 40%</div>
+            <div class="material-description">
+              ⚠ Duro y resistente al desgarre<br>
+              ⚠ Requiere carburo OBLIGATORIAMENTE<br>
+              ⚠ Genera viruta corta y caliente<br>
+              ⚠ Refrigeración constante obligatoria
+            </div>
+          </div>
+        </div>
+
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Acero Inoxidable 316L</div>
+            <div class="material-badge">Inoxidable</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 8.00 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 160–210</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 550 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐☆☆☆ 40%</div>
+            <div class="material-description">
+              ⚠ MÁS difícil que 304 — endurecimiento potenciado<br>
+              ⚠ Tendencia al endurecimiento por deformación<br>
+              ⚠ Avance constante OBLIGATORIO<br>
+              ⚠ Refrigeración abundante obligatoria
+            </div>
+          </div>
+        </div>
+
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Acero Inoxidable Dúplex (2205)</div>
+            <div class="material-badge">Inoxidable</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 7.80 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 217–270</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 620 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐☆☆☆☆ 30% (MUY DIFÍCIL)</div>
+            <div class="material-description">
+              ⚠ CRÍTICO: Alta resistencia + endurecimiento muy pronunciado<br>
+              ⚠ Requiere carburo o CBN obligatoriamente<br>
+              ⚠ Herramientas robustas, avance constante<br>
+              ⚠ Refrigeración abundante obligatoria
+            </div>
+          </div>
+        </div>
+
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Acero para Herramienta (D2/H13)</div>
+            <div class="material-badge">Herramienta</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 7.70–7.85 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 180–220 (recocido)</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 700–900 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐☆☆☆ 35%</div>
+            <div class="material-description">
+              ⚠ Solo mecanizar en estado RECOCIDO (blando)<br>
+              ⚠ Alta aleación — carburo obligatorio<br>
+              ⚠ Requiere refrigeración constante<br>
+              ✓ Usado para dados, moldes, matrices
+            </div>
+          </div>
+        </div>
+
+        <!-- HIERROS FUNDIDOS -->
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Hierro Fundido Gris (FC-200)</div>
+            <div class="material-badge">Fundido</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 7.20 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 180–260</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 200–280 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐⭐⭐☆ 70%</div>
+            <div class="material-description">
+              ✓ Viruta en POLVO — no forma viruta continua<br>
+              ✓ Cerámica muy eficiente<br>
+              ✓ Puede mecanizarse en SECO<br>
+              ✓ Material estructural y de amortiguación de vibración
+            </div>
+          </div>
+        </div>
+
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Hierro Fundido Nodular (FE-500)</div>
+            <div class="material-badge">Fundido</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 7.10 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 200–280</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 500 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐⭐☆☆ 55%</div>
+            <div class="material-description">
+              ✓ Mayor tenacidad que fundido gris<br>
+              ✓ Viruta corta pero más continua<br>
+              ✓ Herramientas más robustas<br>
+              ✓ Buena alternativa al acero para piezas estructurales
+            </div>
+          </div>
+        </div>
+
+        <!-- NO FERROSOS ADICIONALES -->
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Aluminio General (2024 / 7075)</div>
+            <div class="material-badge">No Ferroso</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 2.70–2.82 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 60–130</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 290–503 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐⭐⭐☆ 60%</div>
+            <div class="material-description">
+              ✓ Excelente maquinabilidad — viruta continua<br>
+              ✓ Ángulos de corte positivos recomendados<br>
+              ⚠ Puede adherirse a la herramienta (Built-Up Edge)<br>
+              ✓ Aleaciones 7075 más duras para aviación
+            </div>
+          </div>
+        </div>
+
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Cobre Electrolítico (Cu-ETP)</div>
+            <div class="material-badge">No Ferroso</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 8.94 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 40–90</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 200–250 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐☆☆☆☆ 20% (DIFÍCIL)</div>
+            <div class="material-description">
+              ⚠ Blando pero DIFÍCIL — tiende a adherirse a la herramienta<br>
+              ⚠ Viruta larga y pegajosa<br>
+              ⚠ Requiere herramientas muy afiladas y velocidades altas<br>
+              ✓ Excelente conductividad eléctrica
+            </div>
+          </div>
+        </div>
+
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Bronce / Latón General</div>
+            <div class="material-badge">No Ferroso</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 8.30–8.90 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 60–150</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 230–380 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐⭐⭐☆ 60%</div>
+            <div class="material-description">
+              ✓ Buena maquinabilidad — viruta fragmentada<br>
+              ✓ Puede mecanizarse en seco en muchos casos<br>
+              ✓ Amplia familia de aleaciones Cu-Zn / Cu-Sn<br>
+              ✓ Excelente resistencia a la corrosión
+            </div>
+          </div>
+        </div>
+
+        <!-- MATERIALES ESPECIALES -->
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Titanio Ti-6Al-4V (Grado 5)</div>
+            <div class="material-badge">Especial</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 4.43 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> HB 300–370</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 950 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐☆☆☆☆ 20% (CRÍTICO)</div>
+            <div class="material-description">
+              ⚠⚠ DIFÍCIL: Baja conductividad térmica genera calor extremo<br>
+              ⚠ Velocidades MUY bajas, avances constantes<br>
+              ⚠ RIESGO DE INCENDIO sin refrigeración abundante<br>
+              ✓ Resistencia peso excepcional (aviación, aeroespacial)
+            </div>
+          </div>
+        </div>
+
+        <!-- NO METÁLICOS -->
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Plástico (Nylon / PVC / HDPE)</div>
+            <div class="material-badge">No Metálico</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 0.95–1.40 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> Shore D 60–85</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 30–80 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐⭐⭐⭐ 90%</div>
+            <div class="material-description">
+              ✓ Muy fácil de mecanizar<br>
+              ⚠ CUIDADO: Se funde con calor excesivo<br>
+              ⚠ NUNCA taladrina — daña el plástico<br>
+              ✓ Usar solo aire comprimido como refrigeración
+            </div>
+          </div>
+        </div>
+
+        <div class="material-card expandible" onclick="toggleMaterialInfo(this)">
+          <div class="material-header">
+            <div class="material-name">Madera / MDF / Compuestos</div>
+            <div class="material-badge">No Metálico</div>
+          </div>
+          <div class="material-info hidden">
+            <div class="material-detail"><strong>Densidad:</strong> 0.45–0.85 g/cm³</div>
+            <div class="material-detail"><strong>Dureza:</strong> Shore D 20–50</div>
+            <div class="material-detail"><strong>Resistencia:</strong> 10–50 MPa</div>
+            <div class="material-detail"><strong>Maquinabilidad:</strong> ⭐⭐⭐⭐⭐ 95%</div>
+            <div class="material-description">
+              ✓ Muy fácil de mecanizar<br>
+              ✓ Genera viruta en astillas o polvo<br>
+              ✓ No requiere refrigeración<br>
+              ⚠ El MDF genera polvo fino —usar mascarilla de protección
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB 4: HERRAMIENTAS -->
+  <div id="tab-herramientas" class="concept-tab-content" style="display:none">
+    <section class="concepts-section">
+      <h3 class="concepts-subtitle">Materiales de Herramientas</h3>
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-header">Acero Rápido (HSS) ⚙️</div>
+          <div class="tool-cost">💰 Muy económica</div>
+          <div class="tool-specs">
+            <div class="spec">Velocidad: 10–150 m/min</div>
+            <div class="spec">Resistencia térmica: ~600°C</div>
+            <div class="spec">Reafilable: ✓ Sí</div>
+          </div>
+          <div class="tool-identify">
+            <strong>Identificar:</strong> Mango gris oscuro. Inscripción 'HSS', 'M2' o 'M42'.
+          </div>
+          <div class="tool-use">
+            <strong>Uso:</strong> Ideal para equipos universitarios, velocidades bajas, herramientas personalizadas.
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header">Carburo Cementado (WC-Co) 💎</div>
+          <div class="tool-cost">💰💰💰 Medio-Alto</div>
+          <div class="tool-specs">
+            <div class="spec">Velocidad: 60–600 m/min</div>
+            <div class="spec">Resistencia térmica: ~900°C</div>
+            <div class="spec">Relación velocidad/HSS: 3–5×</div>
+          </div>
+          <div class="tool-identify">
+            <strong>Identificar:</strong> Filo gris claro. Inscripción 'HM', 'WC', 'Carbide' o código P10/M20/K30.
+          </div>
+          <div class="tool-use">
+            <strong>Uso:</strong> Insertos intercambiables. Permite velocidades altas. Estándar industrial moderno.
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header">Cerámica (Al₂O₃ / Si₃N₄) 🔬</div>
+          <div class="tool-cost">💰💰💰💰 Cara</div>
+          <div class="tool-specs">
+            <div class="spec">Velocidad: 120–800 m/min</div>
+            <div class="spec">Resistencia térmica: ~1200°C</div>
+            <div class="spec">Dureza: Muy alta — Muy frágil</div>
+          </div>
+          <div class="tool-identify">
+            <strong>Identificar:</strong> Inserto blanco/crema o negro. Sin mango tipo HSS.
+          </div>
+          <div class="tool-use">
+            <strong>Uso:</strong> Hierros fundidos duros, aceros. NO apta para taladrado. Requiere máquina rígida.
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header">CBN / PCBN (Nitruro Boro) ✦</div>
+          <div class="tool-cost">💰💰💰💰 Muy cara</div>
+          <div class="tool-specs">
+            <div class="spec">Velocidad: 200–1200 m/min</div>
+            <div class="spec">Resistencia térmica: ~1400°C</div>
+            <div class="spec">Dureza: Segunda solo al diamante</div>
+          </div>
+          <div class="tool-identify">
+            <strong>Identificar:</strong> Inserto oscuro con capa dorada/negra/violeta.
+          </div>
+          <div class="tool-use">
+            <strong>Uso:</strong> Materiales muy duros y endurecidos. Alta producción. NO apta para taladrado.
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB 5: PARÁMETROS -->
+  <div id="tab-parametros" class="concept-tab-content" style="display:none">
+    <section class="concepts-section">
+      <h3 class="concepts-subtitle">Parámetros de Corte</h3>
+      <div class="parameters-list-expanded">
+        <div class="parameter-item-lg">
+          <div class="param-icon">⚙</div>
+          <div class="param-label">S (Spindle Speed) — Velocidad de Husillo</div>
+          <div class="param-unit">rpm (revoluciones por minuto)</div>
+          <div class="param-desc">
+            <strong>¿Qué es?</strong> Número de revoluciones por minuto que da el husillo (pieza en torno, herramienta en fresadora).<br>
+            <strong>¿Por qué?</strong> Determina la velocidad lineal de corte. A mayor velocidad, más rpido avanza el mecanizado, pero genera más calor.<br>
+            <strong>Fórmula:</strong> S = (Vc × 1000) / (π × D)<br>
+            <strong>Rango típico:</strong> 40–6000 rpm según la máquina
+          </div>
+        </div>
+
+        <div class="parameter-item-lg">
+          <div class="param-icon">↗</div>
+          <div class="param-label">F (Feed Rate) — Velocidad de Avance</div>
+          <div class="param-unit">mm/min</div>
+          <div class="param-desc">
+            <strong>¿Qué es?</strong> Distancia que avanza la herramienta por minuto.<br>
+            <strong>¿Por qué?</strong> Controla el acabado superficial y la viruta. Avance alto = viruta gruesa + más velocidad. Avance bajo = acabado fino + más tiempo.<br>
+            <strong>Fórmula:</strong> F = S × f (donde f es avance por revolución)<br>
+            <strong>Impacto:</strong> Afecta directamente la precisión dimensional y rugosidad
+          </div>
+        </div>
+
+        <div class="parameter-item-lg">
+          <div class="param-icon">🔪</div>
+          <div class="param-label">Vc (Velocity of Cut) — Velocidad de Corte</div>
+          <div class="param-unit">m/min</div>
+          <div class="param-desc">
+            <strong>¿Qué es?</strong> Velocidad lineal en la zona de corte (independiente del diámetro).<br>
+            <strong>¿Por qué?</strong> Parámetro estándar que define la vida útil de la herramienta. Viene en tablas según material de pieza + material de herramienta.<br>
+            <strong>Relación con S:</strong> S = (Vc × 1000) / (π × D)<br>
+            <strong>Impacto térmico:</strong> Vc alta = 🔥 más calor, vida más corta. Vc baja = ❄ menos calor, más tiempo
+          </div>
+        </div>
+
+        <div class="parameter-item-lg">
+          <div class="param-icon">⏱</div>
+          <div class="param-label">t (Time) — Tiempo de Mecanizado</div>
+          <div class="param-unit">minutos</div>
+          <div class="param-desc">
+            <strong>¿Qué es?</strong> Tiempo total requerido para completar la operación.<br>
+            <strong>¿Por qué?</strong> Planificación de producción, costos, eficiencia.<br>
+            <strong>Fórmula:</strong> t = L / F (donde L es longitud a mecanizar)<br>
+            <strong>Cálculo completo:</strong> t = (π × D × L) / (Vc × 1000 × f)
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB 6: CONSIDERACIONES -->
+  <div id="tab-consideraciones" class="concept-tab-content" style="display:none">
+    <section class="concepts-section">
+      <h3 class="concepts-subtitle">⚠️ Consideraciones Importan Técnicas</h3>
+      <div class="considerations-grid">
+        <div class="consideration-card alert-danger">
+          <div class="consideration-icon">🔴</div>
+          <div class="consideration-title">Refrigeración Obligatoria</div>
+          <div class="consideration-text">
+            Aceros como AISI 1045 REQUIEREN refrigeración constante. Sin refrigerante:<br>
+            • Desgaste acelerado de herramienta<br>
+            • Desviaciones dimensionales<br>
+            • Poca calidad superficial<br>
+            • Riesgo de roturas
+          </div>
+        </div>
+
+        <div class="consideration-card alert-danger">
+          <div class="consideration-icon">🔥</div>
+          <div class="consideration-title">Control de Viruta</div>
+          <div class="consideration-text">
+            Materiales como aluminio generan viruta continua:<br>
+            • Instala rompevirutas en la herramienta<br>
+            • Mantén ángulos de desprendimiento altos (15°–20°)<br>
+            • Limpia regularmente la zona de corte<br>
+            • Evita atrapamiento y accidentes
+          </div>
+        </div>
+
+        <div class="consideration-card alert-warning">
+          <div class="consideration-icon">⚡</div>
+          <div class="consideration-title">Límites de RPM de Máquina</div>
+          <div class="consideration-text">
+            Si el cálculo da una velocidad mayor que el máximo:<br>
+            • Torno: Máx 3000 rpm<br>
+            • Fresadora: Máx 6000 rpm<br>
+            • Taladro: Máx 3000 rpm<br>
+            → Reduce Vc proporcionalmente o cambia herramienta
+          </div>
+        </div>
+
+        <div class="consideration-card alert-warning">
+          <div class="consideration-icon">🎯</div>
+          <div class="consideration-title">Rigidez de Máquina</div>
+          <div class="consideration-text">
+            • La máquina debe ser rígida para velocidades altas<br>
+            • Vibraciones = problemas de tolerancia<br>
+            • Fija bien la pieza (sin holguras)<br>
+            • Verifica alineación regularmente
+          </div>
+        </div>
+
+        <div class="consideration-card alert-info">
+          <div class="consideration-icon">📏</div>
+          <div class="consideration-title">Verificación Dimensional</div>
+          <div class="consideration-text">
+            • Mide DURANTE el mecanizado (no solo al final)<br>
+            • Ajusta avance/velocidad si hay desviación<br>
+            • Ten en cuenta dilatación térmica<br>
+            • Calibra herramientas antes de comenzar
+          </div>
+        </div>
+
+        <div class="consideration-card alert-info">
+          <div class="consideration-icon">🛡️</div>
+          <div class="consideration-title">Selección de Herramienta</div>
+          <div class="consideration-text">
+            • Elige material de herramienta según el material de pieza<br>
+            • Verifica máxima velocidad recomendada<br>
+            • Para aluminio: carburo o ceramica (nunca HSS lento)<br>
+            • Insertos: deben ser frescos/bien afilados
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB 7: CONSEJOS Y MEJORES PRÁCTICAS -->
+  <div id="tab-consejos" class="concept-tab-content" style="display:none">
+    <section class="concepts-section">
+      <h3 class="concepts-subtitle">💡 Tips & Mejores Prácticas</h3>
+      
+      <div class="tips-categories">
+        <div class="tips-category">
+          <div class="tips-cat-title">🚀 Optimización de Velocidad</div>
+          <ul class="tips-list-expanded">
+            <li><strong>Latón C360:</strong> Máxima velocidad posible (100% maquinabilidad). Usa velocidades altas sin miedo.</li>
+            <li><strong>Aluminio:</strong> Velocidades altas con carburo (200–600 m/min). Evita HSS lento.</li>
+            <li><strong>Acero 1045:</strong> Velocidades medias (30 m/min HSS, 200 m/min carburo). Requiere refrigeración.</li>
+            <li><strong>Tabla de Vc:</strong> La calculadora proporciona Vc exacta para tu material + herramienta. Úsala como referencia.</li>
+          </ul>
+        </div>
+
+        <div class="tips-category">
+          <div class="tips-cat-title">🔧 Mantenimiento & Calibración</div>
+          <ul class="tips-list-expanded">
+            <li>Verifica la alineación del husillo mensualmente (runout < 0.05 mm).</li>
+            <li>Limpia el mandril y portabrocas antes de cada cambio de herramienta.</li>
+            <li>Aplica lubricante en las guías cada semana.</li>
+            <li>Reemplaza insertos cuando notes desgaste o astillado.</li>
+            <li>Recalibra el palpador de profundidad regularmente.</li>
+          </ul>
+        </div>
+
+        <div class="tips-category">
+          <div class="tips-cat-title">🎯 Precisión & Tolerancias</div>
+          <ul class="tips-list-expanded">
+            <li>Mide la pieza DESPUÉS de 2–3 minutos de mecanizado (se estabiliza térmicamente).</li>
+            <li>Usa calibres digitales (no analógicos) para mayor precisión.</li>
+            <li>Aplica un pase de acabado ligero (feed bajo) para lograr tolerancias ajustadas.</li>
+            <li>Verifica temperatura: pieza muy caliente puede variar ±0.1 mm.</li>
+            <li>Usa bloques patrón para verificar referencias dimensionales.</li>
+          </ul>
+        </div>
+
+        <div class="tips-category">
+          <div class="tips-cat-title">⚙️ Selección de Parámetros</div>
+          <ul class="tips-list-expanded">
+            <li><strong>Feed bajo:</strong> Mejor acabado pero más lento (úsalo en pasada final).</li>
+            <li><strong>Feed alto:</strong> Más rápido pero superficies ásperas (desbaste).</li>
+            <li><strong>Vc de tabla:</strong> Es un punto medio. Para aluminio suave, aumenta 10–20%. Para materiales duros, reduce 10–20%.</li>
+            <li><strong>Tipo de pasada:</strong> Desbaste (rápido, material), Semiacabado (equilibrio), Acabado (precisión).</li>
+          </ul>
+        </div>
+
+        <div class="tips-category">
+          <div class="tips-cat-title">🛡️ Seguridad</div>
+          <ul class="tips-list-expanded">
+            <li>SIEMPRE usa gafas de seguridad — virutas metálicas afiladas.</li>
+            <li>Fija cabello largo y evita ropa suelta cerca de máquinas giratorias.</li>
+            <li>Apaga la máquina antes de limpiar virutas (usa cepillo, nunca manos).</li>
+            <li>Verifica que la pieza esté bien sujeta antes de encender.</li>
+            <li>NO intentes detener la pieza con las manos — espera a que frene.</li>
+            <li>Usa EPP (Equipos de Protección Personal) siempre.</li>
+          </ul>
+        </div>
+
+        <div class="tips-category">
+          <div class="tips-cat-title">📊 Solución de Problemas</div>
+          <ul class="tips-list-expanded">
+            <li><strong>Superficies ásperas:</strong> Aumenta Vc, reduce feed, verifica herramienta (puede estar gastada).</li>
+            <li><strong>Rotura de herramienta:</strong> Material duro, velocidad alta, o fijación pobre. Reduce Vc y tensa la pieza.</li>
+            <li><strong>Desviación dimensional:</strong> Verifica alineación, temperatura de pieza, y rigidez de máquina.</li>
+            <li><strong>Vibración excesiva:</strong> Reduce velocidad, aumenta feed, verifica sujeción y filo de herramienta.</li>
+            <li><strong>Desgaste acelerado:</strong> Aumenta refrigeración, reduce Vc, verifica material de herramienta.</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
-  </main>
+    <!-- FÓRMULAS RÁPIDA REFERENCIA -->
+    <section class="concepts-section concepts-formulas">
+      <h3 class="concepts-subtitle">📐 Fórmulas de Referencia Rápida</h3>
+      <div class="formulas-quick">
+        <div class="formula-quick-card">
+          <div class="formula-title">Velocidad de Husillo (rpm)</div>
+          <div class="formula-big">S = (Vc × 1000) / (π × D)</div>
+          <div class="formula-example">Ej: Vc=50 m/min, D=10mm → S = 1,592 rpm</div>
+        </div>
+        <div class="formula-quick-card">
+          <div class="formula-title">Velocidad de Avance (mm/min)</div>
+          <div class="formula-big">F = S × f</div>
+          <div class="formula-example">Ej: S=1000 rpm, f=0.1 mm/rev → F = 100 mm/min</div>
+        </div>
+        <div class="formula-quick-card">
+          <div class="formula-title">Tiempo de Mecanizado (min)</div>
+          <div class="formula-big">t = L / F</div>
+          <div class="formula-example">Ej: L=50mm, F=100 mm/min → t = 0.5 min = 30 seg</div>
+        </div>
+      </div>
+    </section>
+  </div>
 
-  <!-- ══════════════════════════════════════
-       PIE DE PÁGINA
-  ══════════════════════════════════════ -->
-  <footer class="page-footer">
-    <div class="footer-left">
-      PONTIFICIA UNIVERSIDAD JAVERIANA · DEPARTAMENTO DE INGENIERÍA INDUSTRIAL
-    </div>
-    <div class="footer-right">
-      S <span>[rev/min]</span> · F <span>[mm/min]</span> · t <span>[min]</span>
-    </div>
-  </footer>
+</main>
+</div><!-- /#panelConcepts -->
 
-  <!-- Script principal -->
-  <script src="script.js"></script>
 
+<!-- FOOTER -->
+<footer class="page-footer">
+  <div class="footer-left">PONTIFICIA UNIVERSIDAD JAVERIANA · MANUFACTURA MODERNA · Santiago Castro · Carolhina Real · Miguel Quintero ·Jacobo Parra</div>
+  <div class="footer-right">S <span>[rpm]</span> · F <span>[mm/min]</span> · t <span>[min]</span></div>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
