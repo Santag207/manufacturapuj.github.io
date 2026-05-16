@@ -576,6 +576,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 ═══════════════════════════════════════════════ */
 .home-main{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0;display:grid;gap:0}
 
+.section-header-block { text-align: center; margin-bottom: 40px; }
+.section-subheader { font-family: var(--mono); font-size: 14px; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; margin-top: 8px; }
+
 /* HERO SECTION */
 .home-hero{background:linear-gradient(135deg,rgba(245,166,35,.15),rgba(255,107,53,.1)),linear-gradient(180deg,var(--bg2),var(--bg3));border-bottom:2px solid var(--border);padding:80px 40px;text-align:center;animation:fadeInDown .6s ease}
 
@@ -594,6 +597,14 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .home-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .home-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--rlg);padding:32px;transition:all .3s;display:flex;flex-direction:column}
 .home-card:hover{border-color:var(--accent);transform:translateY(-6px);box-shadow:0 12px 32px rgba(245,166,35,.15)}
+
+.home-card.featured-card { border-top: 4px solid var(--accent); background: linear-gradient(180deg, var(--panel), var(--bg2)); }
+.home-card.featured-card:nth-child(2) { border-top-color: var(--blue); }
+.home-card.featured-card:nth-child(3) { border-top-color: var(--green); }
+.home-card.featured-card:nth-child(4) { border-top-color: var(--purple); }
+
+.card-actions { display: flex; gap: 8px; margin-top: auto; }
+.card-actions .home-mode-btn { flex: 1; }
 
 .card-icon{font-size:48px;margin-bottom:16px;line-height:1}
 .card-title{font-family:var(--display);font-weight:700;font-size:20px;color:var(--text);margin-bottom:14px;line-height:1.2}
@@ -686,4 +697,103 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 
   .cta-buttons{gap:10px;flex-direction:column}
   .cta-btn{width:100%;justify-content:center;padding:14px 20px;font-size:13px}
+}
+
+/* ── HEADER NAVIGATION ── */
+.header-actions { display: flex; gap: 8px; margin-left: auto; }
+.nav-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--r);
+  background: var(--bg2); color: var(--text2); cursor: pointer; transition: all .2s;
+  min-width: 80px;
+}
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(245,166,35,.05); }
+.nav-btn.active { border-color: var(--accent); color: #0d0f12; background: var(--accent); }
+.nav-icon { font-size: 16px; }
+.nav-label { font-family: var(--display); font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ── SHARED SECTION HERO ── */
+.section-hero {
+  padding: 40px 20px; text-align: center; border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--bg2), var(--bg)); margin-bottom: 24px;
+}
+
+/* ── MATERIALS PANEL ── */
+.materials-explorer { display: grid; grid-template-columns: 280px 1fr; gap: 24px; max-width: 1200px; margin: 0 auto; padding: 0 20px 40px; }
+.materials-sidebar { position: sticky; top: 100px; height: fit-content; }
+.mat-thumb {
+  margin-top: 20px; height: 200px; background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--rlg); display: flex; align-items: center; justify-content: center;
+  font-size: 60px; position: relative; overflow: hidden;
+}
+.mat-thumb::after { content: 'REF-IMG'; position: absolute; bottom: 8px; font-family: var(--mono); font-size: 8px; color: var(--text3); }
+
+.mat-detail-view { display: grid; gap: 24px; }
+.mat-detail-header { border-bottom: 2px solid var(--accent); padding-bottom: 12px; }
+.mat-detail-title { font-family: var(--display); font-size: 32px; font-weight: 900; color: var(--text); }
+.mat-detail-group { font-family: var(--mono); font-size: 12px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+
+.mat-detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.mat-detail-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--rlg); padding: 20px; }
+.mat-detail-card .card-label {
+  font-family: var(--display); font-weight: 700; font-size: 14px; color: var(--accent);
+  margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.prop-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.03); }
+.prop-row span { color: var(--text2); }
+.prop-row strong { color: var(--text); font-family: var(--mono); }
+.prop-desc { font-size: 12px; color: var(--text3); margin-top: 12px; line-height: 1.5; font-style: italic; }
+.chemical-comp { font-family: var(--mono); font-size: 13px; color: var(--blue); line-height: 1.6; }
+
+.mat-detail-footer { margin-top: 12px; }
+.refrigerant-info {
+  display: flex; gap: 16px; align-items: center; background: rgba(79,195,247,.08);
+  border: 1px solid var(--blue); border-radius: var(--rlg); padding: 20px;
+}
+.refrigerant-icon { font-size: 32px; }
+.refrigerant-info strong { display: block; color: var(--blue); font-family: var(--display); margin-bottom: 4px; }
+.refrigerant-info p { font-size: 14px; color: var(--text); }
+
+/* ── MECHANICS PANEL ── */
+.mechanics-tabs, .motion-tabs {
+  display: flex; justify-content: center; gap: 12px; margin-bottom: 32px;
+  max-width: 900px; margin-left: auto; margin-right: auto;
+}
+.mech-tab-btn, .motion-tab-btn {
+  flex: 1; padding: 14px; background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--rlg); color: var(--text2); font-family: var(--display);
+  font-weight: 700; font-size: 14px; cursor: pointer; transition: all .2s;
+}
+.mech-tab-btn:hover, .motion-tab-btn:hover { border-color: var(--accent); color: var(--text); }
+.mech-tab-btn.active, .motion-tab-btn.active { background: var(--accent); border-color: var(--accent); color: #0d0f12; }
+
+.mech-calc-wrap {
+  display: grid; grid-template-columns: 350px 1fr; gap: 24px;
+  max-width: 1000px; margin: 0 auto 60px;
+}
+.mech-calc-sidebar { background: var(--panel); border: 1px solid var(--border); border-radius: var(--rxl); padding: 28px; }
+.mech-calc-title { font-family: var(--display); font-size: 24px; font-weight: 900; margin-bottom: 8px; }
+.mech-calc-desc { font-size: 13px; color: var(--text3); margin-bottom: 24px; line-height: 1.4; }
+
+.mech-form .form-group { margin-bottom: 18px; }
+.mech-form input, .mech-form select { background: var(--bg); border-width: 2px; }
+
+.mech-calc-results { display: flex; flex-direction: column; gap: 20px; }
+.mech-results-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.mech-res-card {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--rlg);
+  padding: 20px; text-align: center; display: flex; flex-direction: column; gap: 4px;
+  border-bottom: 3px solid var(--accent);
+}
+.mech-res-card .label { font-family: var(--mono); font-size: 11px; color: var(--text3); text-transform: uppercase; }
+.mech-res-card .value { font-family: var(--mono); font-size: 28px; font-weight: 700; color: var(--accent); }
+.mech-res-card .unit { font-size: 12px; color: var(--text2); }
+
+/* MOBILE RESPONSIVE NEW */
+@media(max-width: 850px) {
+  .materials-explorer, .mech-calc-wrap { grid-template-columns: 1fr; }
+  .materials-sidebar { position: static; margin-bottom: 24px; }
+  .mat-detail-grid, .mech-results-grid { grid-template-columns: 1fr; }
+  .header-actions { display: none; } /* Hide on mobile header to avoid clutter, using home cards instead */
 }
