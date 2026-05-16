@@ -63,6 +63,10 @@
       <span class="nav-icon">🏗️</span>
       <span class="nav-label">Mecánica</span>
     </button>
+    <button class="nav-btn" id="btnNavMotion" onclick="setMode('motion')" title="Modelado de Movimiento">
+      <span class="nav-icon">🔄</span>
+      <span class="nav-label">Movimiento</span>
+    </button>
     <button class="nav-btn" id="btnNavConcepts" onclick="setMode('concepts')" title="Información y conceptos">
       <span class="nav-icon">💡</span>
       <span class="nav-label">Conceptos</span>
@@ -83,51 +87,53 @@
   </section>
 
   <section class="home-content">
+    <div class="section-header-block">
+      <h2 class="section-header">Explora los Módulos de Ingeniería</h2>
+      <p class="section-subheader">Herramientas integrales para el diseño, manufactura y análisis</p>
+    </div>
+
     <div class="home-grid">
-      <!-- CARD: QUÉ ES -->
-      <div class="home-card">
-        <div class="card-icon">🎯</div>
-        <h2 class="card-title">¿Qué es esta herramienta?</h2>
-        <p class="card-text">
-          Una calculadora profesional para <strong>mecanizado en máquinas herramienta</strong> (torno, fresadora, taladro). 
-          Calcula automáticamente los parámetros de corte esenciales: <strong>velocidad de husillo (S), avance (F) y tiempo de proceso (t)</strong> basándose en 
-          propiedades reales de 19 materiales diferentes y 4 tipos de herramientas.
-        </p>
-      </div>
-
-      <!-- CARD: CÓMO FUNCIONA -->
-      <div class="home-card">
+      <!-- CARD: MECANIZADO -->
+      <div class="home-card featured-card">
         <div class="card-icon">⚙️</div>
-        <h2 class="card-title">¿Cómo funciona?</h2>
+        <h2 class="card-title">Mecanizado y Manufactura</h2>
         <p class="card-text">
-          <strong>1. Selecciona operación:</strong> Torneado, Fresado o Taladrado<br>
-          <strong>2. Elige material:</strong> De 19 opciones en tu inventario<br>
-          <strong>3. Selecciona herramienta:</strong> HSS, Carburo, Cerámica o CBN<br>
-          <strong>4. Introduce parámetros:</strong> Diámetro, longitud, avance<br>
-          <strong>5. Obtén resultados:</strong> Revoluciones, velocidad, tiempo instantáneamente
+          Calculadora profesional de parámetros de corte (S, F, t). Basada en datos reales de <strong>19 materiales</strong> y 4 tipos de herramientas para Torno, Fresa y Taladro.
         </p>
+        <div class="card-actions">
+          <button class="home-mode-btn" onclick="setMode('quick')">⚡ Rápido</button>
+          <button class="home-mode-btn" onclick="setMode('guided')">🧭 Guiado</button>
+        </div>
       </div>
 
-      <!-- CARD: MODOS -->
-      <div class="home-card">
-        <div class="card-icon">⚡</div>
-        <h2 class="card-title">Modo Rápido</h2>
+      <!-- CARD: MECANICA -->
+      <div class="home-card featured-card">
+        <div class="card-icon">🏗️</div>
+        <h2 class="card-title">Mecánica de Sólidos</h2>
         <p class="card-text">
-          Para operarios y técnicos con experiencia. Interfaz compacta, cálculos inmediatos. 
-          Ingresa valores, presiona calcular, obtén resultados al instante sin explicaciones.
+          Análisis de <strong>Esfuerzos y Deformaciones</strong>. Carga Axial, Torsión, Flexión, Recipientes a Presión, Pandeo y <strong>Círculo de Mohr</strong> para transformación de esfuerzos.
         </p>
-        <button class="home-mode-btn" onclick="setMode('quick')">Ir a Modo Rápido →</button>
+        <button class="home-mode-btn" onclick="setMode('mechanics')">Ir a Mecánica →</button>
       </div>
 
-      <!-- CARD: WIZARD -->
-      <div class="home-card">
-        <div class="card-icon">🧭</div>
-        <h2 class="card-title">Modo Guiado (Wizard)</h2>
+      <!-- CARD: MATERIALES -->
+      <div class="home-card featured-card">
+        <div class="card-icon">🔬</div>
+        <h2 class="card-title">Ingeniería de Materiales</h2>
         <p class="card-text">
-          Para estudiantes y aprendices. Explicaciones paso a paso, ilustraciones de máquinas, 
-          tips de seguridad y recomendaciones técnicas. Aprende mientras calculas.
+          Explorador detallado de <strong>Propiedades Mecánicas y Composición</strong>. Guías de diseño, selección de materiales y aplicaciones industriales detalladas.
         </p>
-        <button class="home-mode-btn" onclick="setMode('guided')">Ir a Modo Guiado →</button>
+        <button class="home-mode-btn" onclick="setMode('materials')">Ir a Materiales →</button>
+      </div>
+
+      <!-- CARD: MOVIMIENTO -->
+      <div class="home-card featured-card">
+        <div class="card-icon">🔄</div>
+        <h2 class="card-title">Cinemática y Movimiento</h2>
+        <p class="card-text">
+          Modelado de sistemas de transmisión de potencia. Cálculo de <strong>Relaciones de Transmisión</strong>, velocidades y torques en engranajes y poleas.
+        </p>
+        <button class="home-mode-btn" onclick="setMode('motion')">Ir a Movimiento →</button>
       </div>
 
       <!-- CARD: CONCEPTOS -->
@@ -135,81 +141,60 @@
         <div class="card-icon">💡</div>
         <h2 class="card-title">Base de Conocimiento</h2>
         <p class="card-text">
-          Explora todo sobre mecanizado: operaciones, máquinas, propiedades de 19 materiales, 
-          tipos de herramientas, parámetros de corte, consideraciones técnicas y mejores prácticas.
+          Teoría completa sobre procesos de manufactura, máquinas-herramienta, seguridad industrial y mejores prácticas en el taller.
         </p>
-        <button class="home-mode-btn" onclick="setMode('concepts')">Ir a Conceptos →</button>
+        <button class="home-mode-btn" onclick="setMode('concepts')">Ver Conceptos →</button>
       </div>
 
-      <!-- CARD: DATOS -->
+      <!-- CARD: DISEÑO -->
       <div class="home-card">
-        <div class="card-icon">📊</div>
-        <h2 class="card-title">Datos Técnicos Reales</h2>
+        <div class="card-icon">📐</div>
+        <h2 class="card-title">Diseño de Máquinas</h2>
         <p class="card-text">
-          Todos los valores de velocidad de corte (Vc) provienen de especificaciones técnicas 
-          PDF de la PUJ. 19 materiales × 4 herramientas = 76 combinaciones con datos validados.
+          Integración de manufactura y resistencia de materiales para el dimensionamiento de componentes mecánicos y factores de seguridad.
         </p>
-      </div>
-
-      <!-- CARD: MECANICA -->
-      <div class="home-card">
-        <div class="card-icon">🏗️</div>
-        <h2 class="card-title">Mecánica de Materiales</h2>
-        <p class="card-text">
-          Calculadora de esfuerzos, deformaciones, torsión y flexión. Evalúa la integridad estructural de tus piezas mecánicas bajo diferentes condiciones de carga.
-        </p>
-        <button class="home-mode-btn" onclick="setMode('mechanics')">Ir a Mecánica →</button>
-      </div>
-
-      <!-- CARD: MATERIALES -->
-      <div class="home-card">
-        <div class="card-icon">🔬</div>
-        <h2 class="card-title">Fundamentos de Materiales</h2>
-        <p class="card-text">
-          Explora la composición química, microestructura y propiedades físicas avanzadas de los materiales. Datos detallados para selección de materiales en ingeniería.
-        </p>
-        <button class="home-mode-btn" onclick="setMode('materials')">Ir a Materiales →</button>
+        <button class="home-mode-btn" onclick="setMode('mechanics')">Ver Criterios →</button>
       </div>
     </div>
 
     <!-- CARACTERÍSTICAS PRINCIPALES -->
     <section class="home-features">
-      <h2 class="section-header">Características Principales</h2>
+      <h2 class="section-header">Capacidades del Sistema v5.5.0</h2>
       <div class="features-list">
         <div class="feature-item">
           <span class="feature-check">✓</span>
           <div class="feature-content">
-            <strong>19 Materiales</strong> — Desde aluminio 6061 hasta titanio Ti-6Al-4V, incluyendo aceros, hierros fundidos y no metálicos
+            <strong>Ingeniería de Materiales</strong> — Base de datos con Propiedades Elásticas (E, G, ν) y Químicas para 19 materiales.
           </div>
         </div>
         <div class="feature-item">
           <span class="feature-check">✓</span>
           <div class="feature-content">
-            <strong>4 Tipos de Herramientas</strong> — HSS (económico), Carburo (versátil), Cerámica (rápido), CBN (ultra-rápido)
+            <strong>Mecánica de Sólidos</strong> — 6 módulos de cálculo incluyendo Transformación de Esfuerzos (Mohr) y Pandeo de Euler.
           </div>
         </div>
         <div class="feature-item">
           <span class="feature-check">✓</span>
           <div class="feature-content">
-            <strong>3 Operaciones</strong> — Torneado (piezas redondas), Fresado (geometrías complejas), Taladrado (agujeros precisos)
+            <strong>Manufactura Avanzada</strong> — 76 combinaciones validadas de Vc y avances para mecanizado de precisión.
           </div>
         </div>
         <div class="feature-item">
           <span class="feature-check">✓</span>
           <div class="feature-content">
-            <strong>Cálculos Precisos</strong> — S (rpm), F (mm/min), t (minutos) basados en fórmulas industriales estándar
+            <strong>Cinemática Aplicada</strong> — Análisis de transmisiones por engranajes y poleas con cálculo de torque.
           </div>
         </div>
         <div class="feature-item">
           <span class="feature-check">✓</span>
           <div class="feature-content">
-            <strong>Interfaz Responsiva</strong> — Funciona perfectamente en desktop, tablet y smartphones
+            <strong>Interfaz Multimodal</strong> — Modos Rápido, Guiado y de Consulta Técnica para diferentes niveles de usuario.
           </div>
         </div>
         <div class="feature-item">
           <span class="feature-check">✓</span>
           <div class="feature-content">
-            <strong>Modo Oscuro Profesional</strong> — Diseño ergonómico para talleres de mecanizado
+            <strong>Enfoque Educativo</strong> — Diseñado para la formación en Ingeniería Mecánica y Manufactura (PUJ).
           </div>
         </div>
       </div>
@@ -1286,6 +1271,26 @@
 </div><!-- /#panelMaterials -->
 
 <!-- ═══════════════════════════════════════
+     PANEL MODELADO DE MOVIMIENTO
+═══════════════════════════════════════ -->
+<div id="panelMotion" style="display:none">
+<main class="motion-main">
+  <section class="section-hero">
+    <h2 class="hero-title">🔄 Cinemática y Modelado de Movimiento</h2>
+    <p class="hero-subtitle">Transmisión de Potencia y Relaciones de Velocidad</p>
+  </section>
+
+  <div class="motion-tabs">
+    <button class="motion-tab-btn active" onclick="switchMotionTab('gears')">Engranajes y Poleas</button>
+  </div>
+
+  <div id="motion-content" class="motion-content">
+    <!-- Se rellena dinámicamente -->
+  </div>
+</main>
+</div>
+
+<!-- ═══════════════════════════════════════
      PANEL MECÁNICA DE MATERIALES
 ═══════════════════════════════════════ -->
 <div id="panelMechanics" style="display:none">
@@ -1296,9 +1301,12 @@
   </section>
 
   <div class="mechanics-tabs">
-    <button class="mech-tab-btn active" onclick="switchMechTab('axial')">Carga Axial</button>
+    <button class="mech-tab-btn active" onclick="switchMechTab('axial')">Carga Axial/Térmica</button>
     <button class="mech-tab-btn" onclick="switchMechTab('torsion')">Torsión</button>
     <button class="mech-tab-btn" onclick="switchMechTab('bending')">Flexión</button>
+    <button class="mech-tab-btn" onclick="switchMechTab('vessels')">Recipientes</button>
+    <button class="mech-tab-btn" onclick="switchMechTab('buckling')">Pandeo</button>
+    <button class="mech-tab-btn" onclick="switchMechTab('mohr')">Mohr (2D)</button>
   </div>
 
   <div id="mech-content" class="mech-content">

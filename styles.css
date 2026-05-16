@@ -576,6 +576,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 ═══════════════════════════════════════════════ */
 .home-main{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0;display:grid;gap:0}
 
+.section-header-block { text-align: center; margin-bottom: 40px; }
+.section-subheader { font-family: var(--mono); font-size: 14px; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; margin-top: 8px; }
+
 /* HERO SECTION */
 .home-hero{background:linear-gradient(135deg,rgba(245,166,35,.15),rgba(255,107,53,.1)),linear-gradient(180deg,var(--bg2),var(--bg3));border-bottom:2px solid var(--border);padding:80px 40px;text-align:center;animation:fadeInDown .6s ease}
 
@@ -594,6 +597,14 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .home-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .home-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--rlg);padding:32px;transition:all .3s;display:flex;flex-direction:column}
 .home-card:hover{border-color:var(--accent);transform:translateY(-6px);box-shadow:0 12px 32px rgba(245,166,35,.15)}
+
+.home-card.featured-card { border-top: 4px solid var(--accent); background: linear-gradient(180deg, var(--panel), var(--bg2)); }
+.home-card.featured-card:nth-child(2) { border-top-color: var(--blue); }
+.home-card.featured-card:nth-child(3) { border-top-color: var(--green); }
+.home-card.featured-card:nth-child(4) { border-top-color: var(--purple); }
+
+.card-actions { display: flex; gap: 8px; margin-top: auto; }
+.card-actions .home-mode-btn { flex: 1; }
 
 .card-icon{font-size:48px;margin-bottom:16px;line-height:1}
 .card-title{font-family:var(--display);font-weight:700;font-size:20px;color:var(--text);margin-bottom:14px;line-height:1.2}
@@ -745,17 +756,17 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .refrigerant-info p { font-size: 14px; color: var(--text); }
 
 /* ── MECHANICS PANEL ── */
-.mechanics-tabs {
+.mechanics-tabs, .motion-tabs {
   display: flex; justify-content: center; gap: 12px; margin-bottom: 32px;
   max-width: 900px; margin-left: auto; margin-right: auto;
 }
-.mech-tab-btn {
+.mech-tab-btn, .motion-tab-btn {
   flex: 1; padding: 14px; background: var(--bg2); border: 1px solid var(--border);
   border-radius: var(--rlg); color: var(--text2); font-family: var(--display);
   font-weight: 700; font-size: 14px; cursor: pointer; transition: all .2s;
 }
-.mech-tab-btn:hover { border-color: var(--accent); color: var(--text); }
-.mech-tab-btn.active { background: var(--accent); border-color: var(--accent); color: #0d0f12; }
+.mech-tab-btn:hover, .motion-tab-btn:hover { border-color: var(--accent); color: var(--text); }
+.mech-tab-btn.active, .motion-tab-btn.active { background: var(--accent); border-color: var(--accent); color: #0d0f12; }
 
 .mech-calc-wrap {
   display: grid; grid-template-columns: 350px 1fr; gap: 24px;
