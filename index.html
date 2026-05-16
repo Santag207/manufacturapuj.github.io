@@ -54,10 +54,20 @@
     <span><span class="status-dot"></span>ACTIVO</span>
     <span id="currentTime">--:--:--</span>
   </div>
-  <button class="concepts-btn" onclick="setMode('concepts')" title="Información y conceptos">
-    <span class="concepts-icon">💡</span>
-    <span class="concepts-label">Conceptos Basicos</span>
-  </button>
+  <div class="header-actions">
+    <button class="nav-btn" id="btnNavMaterials" onclick="setMode('materials')" title="Fundamentos de Materiales">
+      <span class="nav-icon">🔬</span>
+      <span class="nav-label">Materiales</span>
+    </button>
+    <button class="nav-btn" id="btnNavMechanics" onclick="setMode('mechanics')" title="Mecánica de Materiales">
+      <span class="nav-icon">🏗️</span>
+      <span class="nav-label">Mecánica</span>
+    </button>
+    <button class="nav-btn" id="btnNavConcepts" onclick="setMode('concepts')" title="Información y conceptos">
+      <span class="nav-icon">💡</span>
+      <span class="nav-label">Conceptos</span>
+    </button>
+  </div>
 </header>
 
 <!-- ═══════════════════════════════════════
@@ -139,6 +149,26 @@
           Todos los valores de velocidad de corte (Vc) provienen de especificaciones técnicas 
           PDF de la PUJ. 19 materiales × 4 herramientas = 76 combinaciones con datos validados.
         </p>
+      </div>
+
+      <!-- CARD: MECANICA -->
+      <div class="home-card">
+        <div class="card-icon">🏗️</div>
+        <h2 class="card-title">Mecánica de Materiales</h2>
+        <p class="card-text">
+          Calculadora de esfuerzos, deformaciones, torsión y flexión. Evalúa la integridad estructural de tus piezas mecánicas bajo diferentes condiciones de carga.
+        </p>
+        <button class="home-mode-btn" onclick="setMode('mechanics')">Ir a Mecánica →</button>
+      </div>
+
+      <!-- CARD: MATERIALES -->
+      <div class="home-card">
+        <div class="card-icon">🔬</div>
+        <h2 class="card-title">Fundamentos de Materiales</h2>
+        <p class="card-text">
+          Explora la composición química, microestructura y propiedades físicas avanzadas de los materiales. Datos detallados para selección de materiales en ingeniería.
+        </p>
+        <button class="home-mode-btn" onclick="setMode('materials')">Ir a Materiales →</button>
       </div>
     </div>
 
@@ -1223,6 +1253,59 @@
 
 </main>
 </div><!-- /#panelConcepts -->
+
+<!-- ═══════════════════════════════════════
+     PANEL FUNDAMENTOS DE MATERIALES
+═══════════════════════════════════════ -->
+<div id="panelMaterials" style="display:none">
+<main class="materials-main">
+  <section class="section-hero">
+    <h2 class="hero-title">🔬 Fundamentos y Propiedades de Materiales</h2>
+    <p class="hero-subtitle">Información técnica detallada y composición química</p>
+  </section>
+
+  <div class="materials-explorer">
+    <div class="materials-sidebar">
+      <div class="form-group">
+        <label for="selMatDetail">Seleccionar Material</label>
+        <select id="selMatDetail" onchange="renderMaterialDetail(this.value)">
+          <option value="">— Seleccionar material —</option>
+        </select>
+      </div>
+      <div id="matThumb" class="mat-thumb"></div>
+    </div>
+
+    <div class="materials-content" id="matDetailContent">
+      <div class="empty-state">
+        <span class="empty-icon">🔍</span>
+        <p>Selecciona un material para ver sus detalles completos</p>
+      </div>
+    </div>
+  </div>
+</main>
+</div><!-- /#panelMaterials -->
+
+<!-- ═══════════════════════════════════════
+     PANEL MECÁNICA DE MATERIALES
+═══════════════════════════════════════ -->
+<div id="panelMechanics" style="display:none">
+<main class="mechanics-main">
+  <section class="section-hero">
+    <h2 class="hero-title">🏗️ Calculadora de Mecánica de Materiales</h2>
+    <p class="hero-subtitle">Esfuerzos, Deformaciones y Análisis Estructural</p>
+  </section>
+
+  <div class="mechanics-tabs">
+    <button class="mech-tab-btn active" onclick="switchMechTab('axial')">Carga Axial</button>
+    <button class="mech-tab-btn" onclick="switchMechTab('torsion')">Torsión</button>
+    <button class="mech-tab-btn" onclick="switchMechTab('bending')">Flexión</button>
+  </div>
+
+  <div id="mech-content" class="mech-content">
+    <!-- Se rellena dinámicamente -->
+  </div>
+</main>
+</div><!-- /#panelMechanics -->
 
 
 <!-- FOOTER -->

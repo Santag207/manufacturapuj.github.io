@@ -22,6 +22,7 @@ function init(){
   renderOperations();
   renderMaterialsSelect('selMaterial');
   renderToolsSelect('selTool');
+  renderMaterialsSelect('selMatDetail');
   startClock();
   updateProgress(1);
   document.getElementById('loadingScreen').classList.add('hidden');
@@ -33,13 +34,24 @@ function setMode(m){
   S.mode = m;
   document.getElementById('modeQuickBtn').classList.toggle('active', m==='quick');
   document.getElementById('modeGuideBtn').classList.toggle('active', m==='guided');
-  document.querySelector('.concepts-btn').classList.toggle('active', m==='concepts');
-  document.getElementById('panelHome').style.display   = m==='home'    ? '' : 'none';
-  document.getElementById('panelQuick').style.display   = m==='quick'   ? '' : 'none';
-  document.getElementById('panelGuided').style.display  = m==='guided'  ? '' : 'none';
-  document.getElementById('panelConcepts').style.display = m==='concepts' ? '' : 'none';
+
+  // Update header nav buttons
+  const navBtns = document.querySelectorAll('.nav-btn');
+  navBtns.forEach(btn => btn.classList.remove('active'));
+  if(m==='materials') document.getElementById('btnNavMaterials')?.classList.add('active');
+  if(m==='mechanics') document.getElementById('btnNavMechanics')?.classList.add('active');
+  if(m==='concepts')  document.getElementById('btnNavConcepts')?.classList.add('active');
+
+  document.getElementById('panelHome').style.display      = m==='home'      ? '' : 'none';
+  document.getElementById('panelQuick').style.display     = m==='quick'     ? '' : 'none';
+  document.getElementById('panelGuided').style.display    = m==='guided'    ? '' : 'none';
+  document.getElementById('panelConcepts').style.display  = m==='concepts'  ? '' : 'none';
+  document.getElementById('panelMaterials').style.display = m==='materials' ? '' : 'none';
+  document.getElementById('panelMechanics').style.display = m==='mechanics' ? '' : 'none';
+
   if(m==='guided'){ initWizard(); }
   if(m==='concepts'){ initConceptsTabs(); }
+  if(m==='mechanics'){ switchMechTab('axial'); }
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -1781,6 +1793,228 @@ function initConceptsTabs(){
   const btns = document.querySelectorAll('.concept-tab-btn');
   if(btns.length > 0){
     btns[0].classList.add('active');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   PANEL DE MATERIALES — DETALLES AVANZADOS
+══════════════════════════════════════════════════════════ */
+
+function renderMaterialDetail(matId){
+  const container = document.getElementById('matDetailContent');
+  if(!matId){
+    container.innerHTML = `<div class="empty-state"><span class="empty-icon">🔍</span><p>Selecciona un material para ver sus detalles completos</p></div>`;
+    return;
+  }
+
+  const m = DB.workpieceMaterials.find(x => x.id === matId);
+  if(!m) return;
+
+  container.innerHTML = `
+    <div class="mat-detail-view fade-in">
+      <div class="mat-detail-header">
+        <h3 class="mat-detail-title">${m.label}</h3>
+        <span class="mat-detail-group">${m.group}</span>
+      </div>
+
+      <div class="mat-detail-grid">
+        <div class="mat-detail-card">
+          <div class="card-label">Identificación y Maquinabilidad</div>
+          <div class="prop-row"><span>Dureza:</span> <strong>${m.hardness}</strong></div>
+          <div class="prop-row"><span>Maquinabilidad:</span> <strong>${m.machinability}</strong></div>
+          <div class="prop-desc">${m.behavior}</div>
+        </div>
+
+        <div class="mat-detail-card">
+          <div class="card-label">Propiedades Mecánicas</div>
+          <div class="prop-row"><span>Módulo de Young (E):</span> <strong>${m.youngsModulus || 'N/A'}</strong></div>
+          <div class="prop-row"><span>Coeficiente de Poisson (ν):</span> <strong>${m.poissonRatio || 'N/A'}</strong></div>
+          <div class="prop-row"><span>Resistencia a la Tracción:</span> <strong>${m.tensileStrength || 'N/A'}</strong></div>
+          <div class="prop-row"><span>Límite Elástico:</span> <strong>${m.yieldStrength || 'N/A'}</strong></div>
+        </div>
+
+        <div class="mat-detail-card">
+          <div class="card-label">Propiedades Físicas y Térmicas</div>
+          <div class="prop-row"><span>Densidad:</span> <strong>${m.density || 'N/A'}</strong></div>
+          <div class="prop-row"><span>Expansión Térmica:</span> <strong>${m.thermalExpansion || 'N/A'}</strong></div>
+          <div class="prop-row"><span>Conductividad Térmica:</span> <strong>${m.thermalConductivity || 'N/A'}</strong></div>
+          <div class="prop-row"><span>Punto de Fusión:</span> <strong>${m.meltingPoint || 'N/A'}</strong></div>
+        </div>
+
+        <div class="mat-detail-card">
+          <div class="card-label">Composición Química</div>
+          <div class="chemical-comp">${m.chemicalComposition || 'Datos de composición no disponibles.'}</div>
+        </div>
+      </div>
+
+      <div class="mat-detail-footer">
+        <div class="refrigerant-info">
+          <span class="refrigerant-icon">💧</span>
+          <div>
+            <strong>Recomendación de Refrigerante:</strong>
+            <p>${m.refrigerant}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PANEL DE MECÁNICA — CALCULADORAS
+══════════════════════════════════════════════════════════ */
+
+let currentMechTab = 'axial';
+
+function switchMechTab(tabId){
+  currentMechTab = tabId;
+  const btns = document.querySelectorAll('.mech-tab-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  const activeBtn = Array.from(btns).find(b => b.getAttribute('onclick').includes(tabId));
+  activeBtn?.classList.add('active');
+
+  renderMechContent();
+}
+
+function renderMechContent(){
+  const container = document.getElementById('mech-content');
+  const calc = DB.mechanicsCalculations[currentMechTab];
+
+  container.innerHTML = `
+    <div class="mech-calc-wrap fade-in">
+      <div class="mech-calc-sidebar">
+        <h3 class="mech-calc-title">${calc.label}</h3>
+        <p class="mech-calc-desc">${calc.description}</p>
+
+        <div class="mech-form">
+          ${calc.variables.map(v => `
+            <div class="form-group">
+              <label for="mech_${v.id}">${v.label} [${v.unit}]</label>
+              <input type="number" id="mech_${v.id}" value="${v.default}" oninput="runMechCalculation()"/>
+            </div>
+          `).join('')}
+
+          <div class="form-group">
+            <label>Material de Referencia (para E/G)</label>
+            <select id="mech_mat_ref" onchange="runMechCalculation()">
+              <option value="">— Seleccionar material —</option>
+              ${DB.workpieceMaterials.map(m => `<option value="${m.id}">${m.label}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="mech-calc-results">
+        <div class="results-header">Resultados del Análisis</div>
+        <div id="mechResultsDisplay" class="mech-results-grid">
+          <!-- Resultados dinámicos -->
+        </div>
+        <div class="formula-box">
+          <div class="formula-box-title">Fórmulas Empleadas</div>
+          ${Object.entries(calc.formulas).map(([k, eq]) => `
+            <div class="formula-item">
+              <span class="formula-var">${k.toUpperCase()}</span>
+              <span class="formula-eq">${eq}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+
+  runMechCalculation();
+}
+
+function runMechCalculation(){
+  const tab = currentMechTab;
+  const matId = document.getElementById('mech_mat_ref').value;
+  const mat = DB.workpieceMaterials.find(x => x.id === matId);
+  const resultsDiv = document.getElementById('mechResultsDisplay');
+
+  // Extract Young's Modulus E (convert GPa to MPa)
+  let E = 200000; // Default Steel
+  if(mat && mat.youngsModulus){
+    E = parseFloat(mat.youngsModulus) * 1000;
+  }
+
+  // Shear Modulus G (G = E / (2 * (1 + nu)))
+  let nu = mat?.poissonRatio || 0.3;
+  let G = E / (2 * (1 + nu));
+
+  if(tab === 'axial'){
+    const P = parseFloat(document.getElementById('mech_P').value);
+    const A = parseFloat(document.getElementById('mech_A').value);
+    const L = parseFloat(document.getElementById('mech_L').value);
+
+    const sigma = P / A;
+    const epsilon = sigma / E;
+    const delta = (P * L) / (A * E);
+
+    resultsDiv.innerHTML = `
+      <div class="mech-res-card">
+        <div class="label">Esfuerzo Normal (σ)</div>
+        <div class="value">${fmt(sigma)}</div>
+        <div class="unit">MPa (N/mm²)</div>
+      </div>
+      <div class="mech-res-card">
+        <div class="label">Deformación Unitaria (ε)</div>
+        <div class="value">${epsilon.toExponential(4)}</div>
+        <div class="unit">mm/mm</div>
+      </div>
+      <div class="mech-res-card">
+        <div class="label">Deformación Total (δ)</div>
+        <div class="value">${fmt(delta)}</div>
+        <div class="unit">mm</div>
+      </div>
+    `;
+  } else if(tab === 'torsion'){
+    const T_nm = parseFloat(document.getElementById('mech_T').value);
+    const T = T_nm * 1000; // Convert to N·mm
+    const c = parseFloat(document.getElementById('mech_c').value);
+    const L = parseFloat(document.getElementById('mech_L').value);
+
+    const J = (Math.PI * Math.pow(c, 4)) / 2;
+    const tauMax = (T * c) / J;
+    const phiRad = (T * L) / (J * G);
+    const phiDeg = phiRad * (180 / Math.PI);
+
+    resultsDiv.innerHTML = `
+      <div class="mech-res-card">
+        <div class="label">Inercia Polar (J)</div>
+        <div class="value">${fmt(J)}</div>
+        <div class="unit">mm⁴</div>
+      </div>
+      <div class="mech-res-card">
+        <div class="label">Esfuerzo Cortante (τ_max)</div>
+        <div class="value">${fmt(tauMax)}</div>
+        <div class="unit">MPa</div>
+      </div>
+      <div class="mech-res-card">
+        <div class="label">Ángulo de Giro (φ)</div>
+        <div class="value">${fmt(phiDeg)}</div>
+        <div class="unit">grados (°)</div>
+      </div>
+    `;
+  } else if(tab === 'bending'){
+    const M_nm = parseFloat(document.getElementById('mech_M').value);
+    const M = M_nm * 1000; // Convert to N·mm
+    const c = parseFloat(document.getElementById('mech_c').value);
+    const I = parseFloat(document.getElementById('mech_I').value);
+
+    const sigmaMax = (M * c) / I;
+
+    resultsDiv.innerHTML = `
+      <div class="mech-res-card">
+        <div class="label">Esfuerzo Máximo (σ_max)</div>
+        <div class="value">${fmt(sigmaMax)}</div>
+        <div class="unit">MPa</div>
+      </div>
+      <div class="mech-res-card" style="grid-column: span 2">
+        <div class="label">Módulo de Sección (S)</div>
+        <div class="value">${fmt(I/c)}</div>
+        <div class="unit">mm³</div>
+      </div>
+    `;
   }
 }
 
